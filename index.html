@@ -3,328 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>NGS Varyant Yazımı — Tam Öğretici (HGVS/HGNC)</title>
+<title>NGS Varyant Yazımı — HGVS/HGNC Öğretici</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-/* ========= THEME ========= */
 :root{
   --bg:#f7fafc; --panel:#ffffff; --text:#0f172a; --muted:#475569; --border:#e2e8f0;
-  --chip:#f1f5f9; --info:#dbeafe; --ok:#dcfce7; --warn:#fef3c7;
-  --primary:#1d4ed8; --primary-2:#3b82f6; --accent:#7c3aed;
+  --chip:#f1f5f9; --info:#dbeafe; --ok:#dcfce7; --warn:#fef3c7; --primary:#1d4ed8; --primary2:#3b82f6;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
-a{color:var(--primary-2);text-decoration:none}
-code,kbd,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
+a{color:var(--primary2);text-decoration:none}
+code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 
-/* ========= LAYOUT ========= */
-.wrap{max-width:1400px;margin:0 auto;padding:16px}
-.header{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;display:grid;gap:8px}
+/* header minimalist */
+.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:12px}
+.header{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px 16px}
 .h-title{font-weight:900;font-size:clamp(22px,4.5vw,34px);color:var(--primary)}
-.h-sub{color:var(--muted);font-size:14px}
-.h-links{display:flex;gap:8px;flex-wrap:wrap}
-.h-link{background:var(--chip);border:1px solid var(--border);padding:8px 12px;border-radius:999px;font-size:13px}
-.h-badges{display:flex;gap:8px;flex-wrap:wrap}
-.badge{background:var(--ok);border:1px solid #bbf7d0;padding:6px 10px;border-radius:10px;font-size:12px}
 
-/* GRID:   [sidebar] [content] [panel]  (>=1200px) */
-.grid{
-  margin-top:12px;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
-}
-@media (min-width:900px){
-  .grid{grid-template-columns:260px 1fr}
-}
-@media (min-width:1200px){
-  .grid{grid-template-columns:260px 1fr 340px}
-}
+/* content card */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.c-head{position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;z-index:1}
+.c-title{font-weight:900;color:var(--primary);font-size:18px}
+.c-body{padding:16px;display:grid;gap:18px}
 
-/* ========= SIDEBAR (LEFT) ========= */
-.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:12px;position:sticky;top:16px;height:max-content}
-.sb-title{font-weight:800;color:var(--primary-2);display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.sb-steps{display:flex;gap:8px;overflow:auto;padding-bottom:6px}
-@media (min-width:900px){.sb-steps{flex-direction:column;overflow:visible}}
-.step{
-  display:inline-flex;align-items:center;gap:10px;white-space:nowrap;
-  background:var(--chip);border:1px solid var(--border);padding:10px 12px;border-radius:12px;
-  font-size:14px;cursor:pointer
-}
-.step:focus{outline:2px solid var(--primary-2)}
-.step.active{background:var(--info);border-color:var(--primary)}
-.sb-nav{display:flex;gap:8px;margin-top:10px}
-.btn{flex:1;background:var(--primary);color:#fff;border:none;padding:12px;border-radius:12px;font-weight:800;cursor:pointer}
-.btn:disabled{background:var(--chip);color:var(--muted)}
-
-/* ========= MAIN CONTENT ========= */
-.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.c-head{position:sticky;top:0;background:var(--panel);z-index:2;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;gap:8px;align-items:center}
-.c-title{font-size:20px;font-weight:900;color:var(--primary)}
-.c-sub{font-size:14px;color:var(--muted)}
-.c-body{padding:16px;display:grid;gap:16px}
-.sec-title{font-weight:900;color:var(--primary-2);display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.p{margin-bottom:8px}
-.tokens{display:flex;flex-wrap:wrap;gap:8px}
-.token{
-  background:var(--info);border:1px solid var(--border);padding:9px 12px;border-radius:10px;cursor:pointer;font-weight:600
-}
+/* sections */
+.section{display:grid;gap:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff}
+.sec-title{font-weight:900;color:var(--primary2);display:flex;gap:8px;align-items:center}
+.small{color:var(--muted);font-size:13px}
+.tokens{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.token{background:var(--info);border:1px solid var(--border);padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600}
 .token:active{transform:scale(.98)}
-.example{background:var(--chip);border-left:4px solid var(--primary-2);padding:12px;border-radius:10px;margin-top:6px}
+.example{background:var(--chip);border-left:4px solid var(--primary2);padding:12px;border-radius:10px}
 .ex-title{font-weight:800;margin-bottom:6px}
 .code{background:var(--panel);border:1px solid var(--border);padding:10px;border-radius:10px;white-space:pre-wrap;word-break:break-word}
-.row{display:grid;gap:12px}
-@media (min-width:760px){.row{grid-template-columns:1fr 1fr}}
 
-.tip{background:var(--ok);border-left:4px solid #10b981;padding:10px;border-radius:10px;font-size:14px}
-.warn{background:var(--warn);border-left:4px solid #f59e0b;padding:10px;border-radius:10px;font-size:14px}
+/* inline explanation slot (per section) */
+.explain-slot{margin-top:8px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ex-head{background:var(--chip);padding:10px 12px;font-weight:800;display:flex;align-items:center;gap:8px}
+.ex-body{padding:12px;display:grid;gap:8px}
+.tcard{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px}
+.t-h{font-weight:900;color:var(--primary2);margin-bottom:6px}
+.t-d{font-size:15px;margin-bottom:6px}
+.t-ex{background:var(--chip);border:1px solid var(--border);padding:8px;border-radius:8px}
+.actions{display:flex;gap:8px}
+.btn{background:var(--primary);color:#fff;border:none;padding:9px 12px;border-radius:10px;font-weight:800;cursor:pointer}
+.btn-sec{background:var(--chip);border:1px solid var(--border);padding:9px 12px;border-radius:10px;font-weight:700;cursor:pointer}
 
-/* ========= RIGHT INFO PANEL ========= */
-.panel{
-  background:var(--panel);border:1px solid var(--border);border-radius:16px;position:sticky;top:16px;height:max-content;display:flex;flex-direction:column
-}
-.p-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-weight:900;color:var(--primary)}
-.p-body{padding:12px 14px;display:grid;gap:10px}
-.tcard{background:var(--chip);border:1px solid var(--border);border-radius:12px;padding:12px}
-.t-h{font-weight:900;color:var(--primary-2);margin-bottom:6px}
-.t-d{font-size:15px;margin-bottom:8px}
-.t-ex{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px;font-family:"Fira Code",ui-monospace,monospace}
-.p-actions{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border)}
-.btn-sec{flex:1;background:var(--chip);border:1px solid var(--border);padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+.tip{background:var(--ok);border-left:4px solid #10b981;padding:10px;border-radius:8px;font-size:14px}
+.warn{background:var(--warn);border-left:4px solid #f59e0b;padding:10px;border-radius:8px;font-size:14px}
 
-/* MOBILE PANEL as ACCORDION (only shows on <1200px) */
-.mob-acc{display:block}
-@media (min-width:1200px){.mob-acc{display:none}}
-details.acc{border:1px solid var(--border);border-radius:12px;overflow:hidden}
-details.acc>summary{
-  list-style:none;cursor:pointer;padding:12px 14px;font-weight:900;display:flex;align-items:center;gap:8px;background:var(--chip)
-}
-details.acc[open]>summary{border-bottom:1px solid var(--border)}
-.acc-body{padding:12px 14px}
-
-/* ACCESSIBILITY: hit targets */
-@media (max-width:480px){
-  .token,.step,.btn,.btn-sec{padding:12px 14px}
-}
+/* footer (links+badges moved here) */
+.footer{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.link{background:var(--chip);border:1px solid var(--border);padding:8px 12px;border-radius:999px;font-size:13px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{background:var(--ok);border:1px solid #bbf7d0;padding:6px 10px;border-radius:10px;font-size:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <!-- ===== HEADER ===== -->
-  <section class="header" aria-labelledby="title">
-    <h1 id="title" class="h-title">NGS Varyant Yazımı — Tam Öğretici</h1>
-    <p class="h-sub">HGVS (varyantların yazımı) • HGNC (gen ad/ semboller). Amaç: tıklanabilir parçalarla adım adım öğrenme.</p>
-    <div class="h-links">
-      <a class="h-link" target="_blank" href="https://hgvs-nomenclature.org/stable/recommendations/general/"><i class="fa fa-external-link-alt"></i> HGVS Genel Öneriler</a>
-      <a class="h-link" target="_blank" href="https://varnomen.hgvs.org/"><i class="fa fa-external-link-alt"></i> HGVS Varyant İsimlendirme</a>
-      <a class="h-link" target="_blank" href="https://www.genenames.org/about/guidelines/"><i class="fa fa-external-link-alt"></i> HGNC Kılavuzları</a>
+  <header class="header"><div class="h-title">NGS Varyant Yazımı — Öğretici</div></header>
+
+  <main class="card">
+    <div class="c-head">
+      <div class="c-title">1 → 8: Girişten örneklere tek sayfa</div>
+      <small class="small mono"><i class="fa fa-scroll"></i> kaydırarak ilerle</small>
     </div>
-    <div class="h-badges">
-      <span class="badge"><i class="fa fa-mobile-screen-button"></i> Mobil öncelikli</span>
-      <span class="badge"><i class="fa fa-desktop"></i> Masaüstü 3 sütun</span>
-      <span class="badge"><i class="fa fa-universal-access"></i> Erişilebilirlik</span>
-    </div>
-  </section>
+    <div class="c-body">
 
-  <!-- ===== GRID ===== -->
-  <div class="grid">
-    <!-- ===== LEFT SIDEBAR ===== -->
-    <aside class="sidebar" aria-label="Öğrenme adımları">
-      <div class="sb-title"><i class="fa fa-road"></i> Yolculuk</div>
-      <div class="sb-steps" id="steps">
-        <button class="step" data-step="intro">1. Giriş</button>
-        <button class="step" data-step="basics">2. Semboller</button>
-        <button class="step" data-step="coords">3. Koordinatlar</button>
-        <button class="step" data-step="types">4. Varyant Tipleri</button>
-        <button class="step" data-step="splice">5. Splice/UTR</button>
-        <button class="step" data-step="fusion">6. Füzyon</button>
-        <button class="step" data-step="report">7. Raporlama</button>
-        <button class="step" data-step="examples">8. Örnekler</button>
-      </div>
-      <div class="sb-nav">
-        <button class="btn" id="prev">Geri</button>
-        <button class="btn" id="next">İleri</button>
-      </div>
-    </aside>
-
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="card" id="content">
-      <div class="c-head">
-        <div>
-          <div class="c-title" id="cTitle">Giriş</div>
-          <div class="c-sub" id="cSub">Motivasyon ve yapı taşları</div>
-        </div>
-        <small class="muted mono"><i class="fa fa-clock"></i> ~5 dk</small>
-      </div>
-      <div class="c-body">
-        <!-- MOBILE: token panel accordion -->
-        <div class="mob-acc">
-          <details class="acc" id="mPanel" open>
-            <summary><i class="fa fa-circle-info"></i> Açıklama Paneli (mobil)</summary>
-            <div class="acc-body">
-              <div class="tcard" id="mTokenCard">
-                <div class="t-h">Bir parçaya dokun — açıklama burada!</div>
-                <div class="t-d">Örn. <span class="token" data-token="colon">:</span>, <span class="token" data-token="levelc">c.</span>, <span class="token" data-token="gt">&gt;</span>, <span class="token" data-token="minus" data-val="-1">-1</span></div>
-                <div class="t-ex">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
-              </div>
-              <div class="p-actions">
-                <button class="btn-sec" id="copyM"><i class="fa fa-copy"></i> Kopyala</button>
-                <label style="display:flex;gap:6px;align-items:center;font-size:14px">
-                  <input type="checkbox" id="autoOpenM" checked> Tıklayınca açık kalsın
-                </label>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <!-- dynamic sections -->
-        <div id="main" class="sections"></div>
-      </div>
-    </main>
-
-    <!-- ===== RIGHT PANEL (DESKTOP) ===== -->
-    <aside class="panel" id="rightPanel" aria-label="Açıklama paneli">
-      <div class="p-head"><i class="fa fa-circle-info"></i> Açıklama Paneli</div>
-      <div class="p-body">
-        <div class="tcard" id="dTokenCard">
-          <div class="t-h">Seçtiğin parça burada açıklanır</div>
-          <div class="t-d">Örnek: <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799<span class="token" data-token="gt">&gt;</span>A</div>
-          <div class="t-ex">Bileşenlere tıkla → açıklama güncellensin.</div>
-        </div>
-      </div>
-      <div class="p-actions">
-        <button class="btn-sec" id="copyD"><i class="fa fa-copy"></i> Kopyala</button>
-        <label style="display:flex;gap:6px;align-items:center;font-size:14px">
-          <input type="checkbox" id="autoOpenD" checked> Tıklayınca açık tut
-        </label>
-      </div>
-    </aside>
-  </div>
-</div>
-
-<script>
-/* ========= TOKEN SÖZLÜĞÜ ========= */
-function tokenInfo(kind,val){
-  const d={
-    ref:{t:'Referans (accession.version)',b:'RefSeq/Ensembl erişimi ve versiyonu (ör. NM_004333.6). Versiyon mutlaka yazılmalı.',e:`<mark>${val||'NM_XXXXXX.X'}</mark>:c.123A>G`},
-    colon:{t:': — Ayraç',b:'Referans ile varyant tanımını ayırır.',e:'NM_004333.6<mark>:c.1799T>A</mark>'},
-    levelc:{t:'c. — Kodlayan DNA',b:'Transkript CDS koordinatı (ATG +1). Klinik raporlarda en sık kullanılır.',e:'NM_004333.6:<mark>c.</mark>1799T>A'},
-    levelg:{t:'g. — Genomik DNA',b:'Kromozom/genom referansına göre koordinatlar (intronlar dahil).',e:'NC_000007.14:<mark>g.</mark>140453136A>T'},
-    leveln:{t:'n. — Non-kodlayan RNA',b:'ncRNA transkript koordinatları.',e:'NR_002196.2:<mark>n.</mark>215A>G'},
-    levelp:{t:'p. — Protein',b:'Üç harfli AA kodu önerilir (örn. p.Val600Glu).',e:'NP_004324.2:<mark>p.</mark>Val600Glu'},
-    pos:{t:'Pozisyon / Aralık',b:'Tek baz (n) veya aralık (n_m).',e:`c.<mark>${val||'123'}</mark>`},
-    gt:{t:'> — Yer değiştirme',b:'Tek baz değişimi: Ref > Alt.',e:'c.1799T<mark>></mark>A'},
-    del:{t:'del — Silme',b:'Bir/birkaç bazın kaldırılması.',e:'c.68_69<mark>del</mark>AG'},
-    ins:{t:'ins — Ekleme',b:'Araya yeni baz(lar) eklenmesi.',e:'c.123_124<mark>ins</mark>T'},
-    dup:{t:'dup — Çoğaltma',b:'Aynı dizinin tekrar eklenmesi.',e:'c.100_102<mark>dup</mark>'},
-    delins:{t:'delins — Sil+Ekle',b:'Silinen aralığın yerine farklı dizi eklenir (indel yerine “delins”).',e:'c.1799_1800<mark>delins</mark>AG'},
-    inv:{t:'inv — İnversiyon',b:'Bir aralığın ters çevrilmesi.',e:'c.400_450<mark>inv</mark>'},
-    fs:{t:'fs — Frameshift',b:'Protein düzeyinde okuma çerçevesi kayması.',e:'p.Glu23Val<mark>fs</mark>Ter17'},
-    ter:{t:'Ter — Stop',b:'Protein düzeyinde durdurma kodonu için Ter önerilir.',e:'p.Gln22<mark>Ter</mark>'},
-    asterisk:{t:"* — 3' UTR",b:"Stop sonrası UTR konumları (c.*n).",e:'c.<mark>*2</mark>A>G'},
-    plus:{t:'+ — Ekzon sonrası intron',b:'+1 donor pozisyonu (kritik splice).',e:'c.92<mark>+1</mark>G>T'},
-    minus:{t:"- — Ekzon öncesi intron / 5' UTR",b:"c.92-1 acceptor; c.-124 ATG öncesi 5' UTR.",e:'c.92<mark>-1</mark>G>A  ·  c.<mark>-124</mark>C>T'},
-    dcolon:{t:':: — Füzyon ayırıcı',b:'GENE1::GENE2 kısaltması; izoform (e13a2/e14a2) raporda belirtilmeli.',e:'BCR<mark>::</mark>ABL1'},
-    fusionIso:{t:'Füzyon izoformu',b:'e13a2, e14a2 vb. RNA kırpım noktalarını tanımlar.',e:'BCR::ABL1 <mark>e13a2</mark>'},
-    aa:{t:'Amino asit değişimi',b:'Üç harfli AA ile; örn. Val→Glu = Val600Glu.',e:`p.<mark>${val||'Val600Glu'}</mark>`},
-    change:{t:'Değişim tanımı',b:'A>G, del, ins, dup, delins, inv vb.',e:`c.123<mark>${val||'A>G'}</mark>`},
-  };
-  return d[kind]||{t:'Açıklama',b:val||'—',e:''};
-}
-
-/* ========= PANEL RENDER ========= */
-function setPanel(kind,val){
-  const info=tokenInfo(kind,val);
-  // desktop
-  const d=document.getElementById('dTokenCard');
-  d.innerHTML=`
-    <div class="t-h">${info.t}</div>
-    <div class="t-d">${info.b}</div>
-    ${info.e?`<div class="t-ex">${info.e}</div>`:''}
-  `;
-  // mobile
-  const m=document.getElementById('mTokenCard');
-  m.innerHTML=`
-    <div class="t-h">${info.t}</div>
-    <div class="t-d">${info.b}</div>
-    ${info.e?`<div class="t-ex">${info.e}</div>`:''}
-  `;
-  // auto open mobile accordion if checked
-  const acc=document.getElementById('mPanel');
-  if(document.getElementById('autoOpenM').checked) acc.open=true;
-}
-
-/* ========= CONTENT VIEWS ========= */
-const main=document.getElementById('main');
-const cTitle=document.getElementById('cTitle');
-const cSub=document.getElementById('cSub');
-const ids=['intro','basics','coords','types','splice','fusion','report','examples'];
-let idx=0;
-
-const Views={
-  intro(){
-    cTitle.textContent='Giriş';
-    cSub.textContent='NGS ve standart yazımın önemi';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-dna"></i> Neden HGVS/HGNC?</div>
-        <p class="p">Standart yazım; raporlar ve veritabanları (ClinVar, gnomAD, COSMIC) ile tutarlılık ve paylaşılabilirlik sağlar.</p>
-        <div class="tip">Kısa kural: <b>[Referans]:[Düzey].[Tanım]</b> — örn. <span class="mono">NM_004333.6:c.1799T>A</span></div>
-      </section>
-
-      <section>
-        <div class="sec-title"><i class="fa fa-puzzle-piece"></i> Yapı taşları</div>
-        <div class="tokens">
-          <span class="token" data-token="ref">Referans</span>
-          <span class="token" data-token="colon">:</span>
-          <span class="token" data-token="levelc">c.</span>
-          <span class="token" data-token="pos">Pozisyon</span>
-          <span class="token" data-token="gt">&gt;</span><span class="token" data-token="change" data-val="A">A</span>
-        </div>
+      <!-- 1. GİRİŞ -->
+      <section class="section" id="s1">
+        <div class="sec-title"><span>1. Giriş</span></div>
+        <div>Standart HGVS/HGNC yazımı; raporlar ve veritabanları (ClinVar, gnomAD, COSMIC) arasında tutarlılık sağlar.</div>
         <div class="example">
-          <div class="ex-title">BRAF V600E</div>
-          <div class="code">
-            <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>
-            <span class="token" data-token="colon">:</span>
-            <span class="token" data-token="levelc">c.</span>
-            <span class="token" data-token="pos" data-val="1799">1799</span>
-            T<span class="token" data-token="gt">&gt;</span>A
-            ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )
-          </div>
-          <p class="p">DNA: <b>c.1799T>A</b> · Protein: <b>p.Val600Glu</b> (onkojenik; MAPK aktivasyonu)</p>
+          <div class="ex-title">Kısa kural</div>
+          <div class="code mono">[Referans]:[Düzey].[Tanım]  →  <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
+        </div>
+        <div class="explain-slot">
+          <div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div>
+          <div class="ex-body"></div>
         </div>
       </section>
 
-      <section class="row">
-        <div>
-          <div class="sec-title"><i class="fa fa-vial"></i> Hızlı analiz</div>
-          <div class="code" id="anIn" contenteditable="true" aria-label="HGVS ifadesi giriniz">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
-          <div class="tokens" style="margin-top:8px">
-            <button class="btn" id="anBtn">Analiz Et</button>
-            <button class="btn-sec" id="anClr">Temizle</button>
-          </div>
-          <div id="anOut" class="example" style="display:none"></div>
-        </div>
-        <div>
-          <div class="sec-title"><i class="fa fa-lightbulb"></i> Püf noktaları</div>
-          <ul style="padding-left:18px">
-            <li>Referansın <b>versiyonu</b> yazılmalı (NM_xxxx.<b>y</b>).</li>
-            <li>DNA (<b>c.</b>) ve protein (<b>p.</b>) birlikte verilirse daha açıklayıcıdır.</li>
-            <li>Splice kritik konumlar: <b>+1</b> ve <b>-1</b>.</li>
-          </ul>
-        </div>
-      </section>
-    `;
-  },
-
-  basics(){
-    cTitle.textContent='Semboller';
-    cSub.textContent='Anlamları ve kısa örnekler';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-symbols"></i> Temel semboller</div>
+      <!-- 2. SEMBOLLER -->
+      <section class="section" id="s2">
+        <div class="sec-title"><span>2. Semboller</span></div>
         <div class="tokens">
           <span class="token" data-token="gt">&gt;</span>
           <span class="token" data-token="del">del</span>
@@ -340,23 +104,19 @@ const Views={
         </div>
         <div class="example">
           <div class="ex-title">Mini örnekler</div>
-          <div class="code">c.1799T<span class="token" data-token="gt">&gt;</span>A</div>
-          <div class="code">c.68_69<span class="token" data-token="del">del</span>AG</div>
-          <div class="code">c.123_124<span class="token" data-token="ins">ins</span>T</div>
-          <div class="code">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div>
-          <div class="code">c.<span class="token" data-token="asterisk" data-val="*5">*5</span>G>A</div>
+          <div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A</div>
+          <div class="code mono">c.68_69<span class="token" data-token="del">del</span>AG</div>
+          <div class="code mono">c.123_124<span class="token" data-token="ins">ins</span>T</div>
+          <div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div>
+          <div class="code mono">c.<span class="token" data-token="asterisk" data-val="*5">*5</span>G>A</div>
         </div>
-        <div class="warn" style="margin-top:8px"><b>Excel uyarısı:</b> Bazı gen kısaltmaları tarih gibi çevrilebilir (örn. MARCH1→1-Mar). Dışa aktarmada metin biçimi kullanın.</div>
+        <div class="warn">Excel uyarısı: MARCH1 gibi genler tarih biçimine dönüşebilir (1-Mar). CSV/TSV ve metin sütun kullanın.</div>
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
-    `;
-  },
 
-  coords(){
-    cTitle.textContent='Koordinatlar';
-    cSub.textContent='c., g., n., p. düzeyleri';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-map"></i> Düzeyler</div>
+      <!-- 3. KOORDİNATLAR -->
+      <section class="section" id="s3">
+        <div class="sec-title"><span>3. Koordinatlar</span></div>
         <div class="tokens">
           <span class="token" data-token="levelg">g.</span>
           <span class="token" data-token="levelc">c.</span>
@@ -365,185 +125,196 @@ const Views={
         </div>
         <div class="example">
           <div class="ex-title">Örnekler</div>
-          <div class="code"><span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelg">g.</span>140453136<span class="token" data-token="gt">&gt;</span>T</div>
-          <div class="code"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A</div>
-          <div class="code"><span class="token" data-token="ref" data-val="NP_004324.2">NP_004324.2</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div>
+          <div class="code mono"><span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelg">g.</span>140453136<span class="token" data-token="gt">&gt;</span>T</div>
+          <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A</div>
+          <div class="code mono"><span class="token" data-token="ref" data-val="NP_004324.2">NP_004324.2</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div>
         </div>
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
-    `;
-  },
 
-  types(){
-    cTitle.textContent='Varyant Tipleri';
-    cSub.textContent='SNV, del/ins, delins, dup, inv, frameshift';
-    main.innerHTML=`
-      <section class="row">
-        <div>
-          <div class="sec-title"><i class="fa fa-shuffle"></i> SNV</div>
-          <div class="code">c.1799T<span class="token" data-token="gt">&gt;</span>A — p.<span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div>
-        </div>
-        <div>
-          <div class="sec-title"><i class="fa fa-trash"></i> Silme</div>
-          <div class="code">c.1799_1801<span class="token" data-token="del">del</span></div>
-        </div>
+      <!-- 4. VARYANT TİPLERİ -->
+      <section class="section" id="s4">
+        <div class="sec-title"><span>4. Varyant Tipleri</span></div>
+        <div class="example"><div class="ex-title">SNV</div><div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A — p.<span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div></div>
+        <div class="example"><div class="ex-title">Silme</div><div class="code mono">c.1799_1801<span class="token" data-token="del">del</span></div></div>
+        <div class="example"><div class="ex-title">Ekleme</div><div class="code mono">c.1799_1800<span class="token" data-token="ins">ins</span>T</div></div>
+        <div class="example"><div class="ex-title">Çoğaltma</div><div class="code mono">c.100_102<span class="token" data-token="dup">dup</span></div></div>
+        <div class="example"><div class="ex-title">delins</div><div class="code mono">c.1799_1800<span class="token" data-token="delins">delins</span>AG</div></div>
+        <div class="example"><div class="ex-title">Frameshift</div><div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div></div>
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
-      <section class="row">
-        <div>
-          <div class="sec-title"><i class="fa fa-plus-circle"></i> Ekleme</div>
-          <div class="code">c.1799_1800<span class="token" data-token="ins">ins</span>T</div>
-        </div>
-        <div>
-          <div class="sec-title"><i class="fa fa-clone"></i> Çoğaltma</div>
-          <div class="code">c.100_102<span class="token" data-token="dup">dup</span></div>
-        </div>
-      </section>
-      <section class="row">
-        <div>
-          <div class="sec-title"><i class="fa fa-retweet"></i> delins</div>
-          <div class="code">c.1799_1800<span class="token" data-token="delins">delins</span>AG</div>
-        </div>
-        <div>
-          <div class="sec-title"><i class="fa fa-bars-staggered"></i> Frameshift</div>
-          <div class="code">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div>
-        </div>
-      </section>
-    `;
-  },
 
-  splice(){
-    cTitle.textContent='Splice / UTR';
-    cSub.textContent='±1 bölgeler, 5′/3′ UTR';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-code-branch"></i> Splice kenarları</div>
-        <div class="code">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T (donor) · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (acceptor)</div>
-        <div class="tip" style="margin-top:8px">Protein etkisi belirsizse: <b>p.?</b> yazılabilir.</div>
+      <!-- 5. SPLICE / UTR -->
+      <section class="section" id="s5">
+        <div class="sec-title"><span>5. Splice/UTR</span></div>
+        <div class="code mono">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T (donor) · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (acceptor)</div>
+        <div class="code mono">5′ UTR: c.<span class="token" data-token="minus" data-val="-124">-124</span>C>T · 3′ UTR: c.<span class="token" data-token="asterisk" data-val="*2">*2</span>A>G</div>
+        <div class="tip">Protein etkisi belirsizse: <b>p.?</b> yazılabilir.</div>
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
-      <section>
-        <div class="sec-title"><i class="fa fa-location-dot"></i> UTR konumları</div>
-        <div class="code">5′ UTR: c.<span class="token" data-token="minus" data-val="-124">-124</span>C>T · 3′ UTR: c.<span class="token" data-token="asterisk" data-val="*2">*2</span>A>G</div>
-      </section>
-    `;
-  },
 
-  fusion(){
-    cTitle.textContent='Füzyon';
-    cSub.textContent='GENE1::GENE2 ve izoform bildirimi';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-link"></i> Kısa gösterim</div>
-        <div class="code"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span> — <span class="token" data-token="fusionIso" data-val="e13a2">e13a2</span></div>
-        <div class="tip" style="margin-top:8px">Rapor: izoform + yöntem (RNA-seq/RT-PCR/FISH) mutlaka belirtilmeli.</div>
+      <!-- 6. FÜZYON -->
+      <section class="section" id="s6">
+        <div class="sec-title"><span>6. Füzyon</span></div>
+        <div class="code mono"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span> — <span class="token" data-token="fusionIso" data-val="e13a2">e13a2</span></div>
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
-    `;
-  },
 
-  report(){
-    cTitle.textContent='Raporlama';
-    cSub.textContent='İçerik ve ACMG ipuçları';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-stethoscope"></i> Örnek rapor parçası</div>
+      <!-- 7. RAPORLAMA -->
+      <section class="section" id="s7">
+        <div class="sec-title"><span>7. Raporlama</span></div>
         <div class="example">
-          <div class="ex-title">BRAF V600E</div>
-          <div class="code">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
+          <div class="ex-title">Örnek rapor parçası</div>
+          <div class="code mono">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
           <ul style="padding-left:18px;margin-top:6px">
             <li>Veritabanları: ClinVar, gnomAD, COSMIC</li>
             <li>ACMG sınıfı + kanıt cümleleri</li>
             <li>Yöntem/limitler (kapsama, VAF, hedef dışı bölgeler)</li>
           </ul>
         </div>
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
-    `;
-  },
 
-  examples(){
-    cTitle.textContent='Örnekler (tıkla & öğren)';
-    cSub.textContent='Okunuş ve parçalara ayırma';
-    main.innerHTML=`
-      <section>
-        <div class="sec-title"><i class="fa fa-book-open"></i> Örnek 1 — BRAF V600E</div>
-        <div class="code">
-          <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span><span class="token" data-token="pos" data-val="1799">1799</span>T<span class="token" data-token="gt">&gt;</span>A
-          ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )
+      <!-- 8. ÖRNEKLER -->
+      <section class="section" id="s8">
+        <div class="sec-title"><span>8. Örnekler</span></div>
+
+        <div class="example">
+          <div class="ex-title">BRAF V600E</div>
+          <div class="code mono">
+            <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span><span class="token" data-token="pos" data-val="1799">1799</span>T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )
+          </div>
+          <p>1799. pozisyonda T→A; protein düzeyinde Val→Glu (onkojenik).</p>
         </div>
-        <div class="example"><div class="ex-title">Açıklama</div>1799. pozisyonda T→A; protein düzeyinde Val→Glu (onkojenik).</div>
+
+        <div class="example">
+          <div class="ex-title">Splice acceptor</div>
+          <div class="code mono">HBB NM_000518.5:<span class="token" data-token="levelc">c.</span>92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (p.?)</div>
+        </div>
+
+        <div class="example">
+          <div class="ex-title">TERT promoter</div>
+          <div class="code mono">TERT: <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span>C>T (C228T)</div>
+        </div>
+
+        <div class="example">
+          <div class="ex-title">delins</div>
+          <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span>AG</div>
+        </div>
+
+        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
       </section>
 
-      <section>
-        <div class="sec-title"><i class="fa fa-book-open"></i> Örnek 2 — Splice acceptor</div>
-        <div class="code">HBB NM_000518.5:<span class="token" data-token="levelc">c.</span>92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (p.?)</div>
-        <div class="example"><div class="ex-title">Açıklama</div>Ekzon başlangıcından 1 baz önceki intron—acceptor yerleşiminde değişim. RNA kanıtı önerilir.</div>
+      <!-- Hızlı analiz aracı (isteğe bağlı) -->
+      <section class="section" id="analyzer">
+        <div class="sec-title"><i class="fa fa-wand-magic-sparkles"></i> Hızlı Analiz</div>
+        <div class="code mono" id="anIn" contenteditable="true" aria-label="HGVS ifadesi giriniz">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
+        <div class="actions" style="margin-top:8px">
+          <button class="btn" id="anBtn">Analiz Et</button>
+          <button class="btn-sec" id="anClr">Temizle</button>
+        </div>
+        <div class="explain-slot">
+          <div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div>
+          <div class="ex-body" id="anOut"></div>
+        </div>
       </section>
 
-      <section>
-        <div class="sec-title"><i class="fa fa-book-open"></i> Örnek 3 — TERT promoter</div>
-        <div class="code">TERT: <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span>C>T (C228T)</div>
-        <div class="example"><div class="ex-title">Açıklama</div>ATG öncesi 5′ UTR/promoter yakını; çok sayıda kanserde raporlanır.</div>
-      </section>
+    </div>
+  </main>
 
-      <section>
-        <div class="sec-title"><i class="fa fa-book-open"></i> Örnek 4 — delins</div>
-        <div class="code"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span>AG</div>
-        <div class="example"><div class="ex-title">Açıklama</div>İki baz silinip yerine “AG” eklendi; “indel” yerine <b>delins</b> tercih edilir.</div>
-      </section>
-    `;
-  }
-};
+  <!-- FOOTER: linkler ve rozetler burada -->
+  <footer class="footer">
+    <div class="links">
+      <a class="link" target="_blank" href="https://hgvs-nomenclature.org/stable/recommendations/general/"><i class="fa fa-link"></i> HGVS Genel Öneriler</a>
+      <a class="link" target="_blank" href="https://varnomen.hgvs.org/"><i class="fa fa-link"></i> HGVS Varyant İsimlendirme</a>
+      <a class="link" target="_blank" href="https://www.genenames.org/about/guidelines/"><i class="fa fa-link"></i> HGNC Kılavuzları</a>
+    </div>
+    <div class="badges">
+      <span class="badge"><i class="fa fa-mobile-screen-button"></i> Mobil öncelikli</span>
+      <span class="badge"><i class="fa fa-universal-access"></i> Erişilebilir</span>
+    </div>
+  </footer>
+</div>
 
-/* ========= RENDER / NAV ========= */
-function render(){
-  Views[ids[idx]]();
-  document.querySelectorAll('.step').forEach((b,i)=>b.classList.toggle('active',i===idx));
-  document.getElementById('prev').disabled = idx===0;
-  document.getElementById('next').disabled = idx===ids.length-1;
-  window.scrollTo({top:0,behavior:'smooth'});
+<script>
+/* ==== Token açıklamaları ==== */
+function tokenInfo(kind,val){
+  const d={
+    ref:{t:'Referans (accession.version)',b:'RefSeq/Ensembl erişimi ve versiyonu (örn. NM_004333.6). Versiyon yazılmalı.',e:`<mark>${val||'NM_XXXXXX.X'}</mark>:c.123A>G`},
+    colon:{t:': — Ayraç',b:'Referans ile varyant tanımını ayırır.',e:'NM_004333.6<mark>:c.1799T>A</mark>'},
+    levelc:{t:'c. — Kodlayan DNA',b:'Transkript CDS koordinatı (ATG +1). Klinik raporlarda standart.',e:'NM_004333.6:<mark>c.</mark>1799T>A'},
+    levelg:{t:'g. — Genomik DNA',b:'Kromozom/genom referansına göre koordinatlar (intronlar dahil).',e:'NC_000007.14:<mark>g.</mark>140453136A>T'},
+    leveln:{t:'n. — Non-kodlayan RNA',b:'ncRNA transkript koordinatları.',e:'NR_002196.2:<mark>n.</mark>215A>G'},
+    levelp:{t:'p. — Protein',b:'Üç harfli AA kodu önerilir (örn. p.Val600Glu).',e:'NP_004324.2:<mark>p.</mark>Val600Glu'},
+    pos:{t:'Pozisyon / Aralık',b:'Tek baz (n) veya aralık (n_m).',e:`c.<mark>${val||'123'}</mark>`},
+    gt:{t:'> — Yer değiştirme',b:'Tek baz değişimi: Ref > Alt.',e:'c.1799T<mark>></mark>A'},
+    del:{t:'del — Silme',b:'Bir/birkaç bazın kaldırılması.',e:'c.68_69<mark>del</mark>AG'},
+    ins:{t:'ins — Ekleme',b:'Araya yeni baz(lar) eklenmesi.',e:'c.123_124<mark>ins</mark>T'},
+    dup:{t:'dup — Çoğaltma',b:'Aynı dizinin tekrar eklenmesi.',e:'c.100_102<mark>dup</mark>'},
+    delins:{t:'delins — Sil+Ekle',b:'Silinen aralığın yerine farklı dizi eklenir (indel yerine “delins”).',e:'c.1799_1800<mark>delins</mark>AG'},
+    inv:{t:'inv — İnversiyon',b:'Bir aralığın ters çevrilmesi.',e:'c.400_450<mark>inv</mark>'},
+    fs:{t:'fs — Frameshift',b:'Protein düzeyinde okuma çerçevesi kayması.',e:'p.Glu23Val<mark>fs</mark>Ter17'},
+    ter:{t:'Ter — Stop',b:'Protein düzeyinde durdurma için Ter önerilir.',e:'p.Gln22<mark>Ter</mark>'},
+    asterisk:{t:"* — 3' UTR",b:"Stop sonrası UTR konumları (c.*n).",e:'c.<mark>*2</mark>A>G'},
+    plus:{t:'+ — Ekzon sonrası intron',b:'+1 donor pozisyonu (kritik splice).',e:'c.92<mark>+1</mark>G>T'},
+    minus:{t:"- — Ekzon öncesi intron / 5' UTR",b:"c.92-1 acceptor; c.-124 ATG öncesi 5' UTR.",e:'c.92<mark>-1</mark>G>A · c.<mark>-124</mark>C>T'},
+    dcolon:{t:':: — Füzyon ayırıcı',b:'GENE1::GENE2 kısaltması; izoform (e13a2/e14a2) raporda belirtilmeli.',e:'BCR<mark>::</mark>ABL1'},
+    fusionIso:{t:'Füzyon izoformu',b:'e13a2, e14a2 vb. RNA kırpım noktaları.',e:'BCR::ABL1 <mark>e13a2</mark>'},
+    aa:{t:'Amino asit değişimi',b:'Üç harfli AA ile; örn. Val→Glu = Val600Glu.',e:`p.<mark>${val||'Val600Glu'}</mark>`},
+    change:{t:'Değişim tanımı',b:'A>G, del, ins, dup, delins, inv vb.',e:`c.123<mark>${val||'A>G'}</mark>`},
+  };
+  return d[kind]||{t:'Açıklama',b:val||'—',e:''};
 }
-render();
 
-document.getElementById('prev').onclick=()=>{ idx=Math.max(0,idx-1); render(); };
-document.getElementById('next').onclick=()=>{ idx=Math.min(ids.length-1,idx+1); render(); };
-document.getElementById('steps').addEventListener('click',e=>{
-  const b=e.target.closest('.step'); if(!b) return;
-  const i=[...document.querySelectorAll('.step')].indexOf(b); if(i>-1){ idx=i; render(); }
-});
+/* aktif bölümün açıklama slotunu bul */
+function getSectionSlot(el){
+  const sec=el.closest('.section');
+  return sec? sec.querySelector('.ex-body') : null;
+}
 
-/* ========= TOKEN CLICK ========= */
+/* bir bölümün açıklamasını güncelle */
+function updateExplain(slot, kind, val){
+  if(!slot) return;
+  const info=tokenInfo(kind,val);
+  slot.innerHTML = `
+    <div class="tcard">
+      <div class="t-h">${info.t}</div>
+      <div class="t-d">${info.b}</div>
+      ${info.e?`<div class="t-ex mono">${info.e}</div>`:''}
+    </div>
+  `;
+  slot.parentElement.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* token tıklama: bulunduğu bölümün açıklamasına yaz */
 document.addEventListener('click',e=>{
   const t=e.target.closest('.token'); if(!t) return;
-  setPanel(t.dataset.token||'ref',t.dataset.val||t.textContent.trim());
+  const slot=getSectionSlot(t);
+  updateExplain(slot, t.dataset.token||'ref', t.dataset.val||t.textContent.trim());
 });
 
-/* ========= COPY BUTTONS ========= */
-document.getElementById('copyD').onclick=()=>{
-  const txt=document.getElementById('dTokenCard').innerText.trim();
-  navigator.clipboard.writeText(txt);
-};
-document.getElementById('copyM').onclick=()=>{
-  const txt=document.getElementById('mTokenCard').innerText.trim();
-  navigator.clipboard.writeText(txt);
-};
-
-/* ========= SIMPLE ANALYZER ========= */
+/* hızlı analizör: çıktıyı kendi bölümünde göster */
 document.addEventListener('click',e=>{
   if(e.target.id==='anBtn'){
     const raw=document.getElementById('anIn').innerText.trim();
     const out=document.getElementById('anOut');
     const re=/^([^:]+):(c|g|n|p)\.\s*([^\s(]+)\s*([A-Za-z*>_]+(?:>[A-Za-z*])?|delins[A-Za-z]+|del|ins[A-Za-z]*|dup|inv)?(?:\s*\(\s*(p\.[^)]+)\s*\))?$/i;
     const m=raw.match(re);
-    if(!m){ out.style.display='block'; out.innerHTML='<b>Biçim tanınamadı.</b> Ör: NM_004333.6:c.1799T>A (p.Val600Glu)'; return; }
+    if(!m){ updateExplain(out, 'change', 'Biçim tanınamadı. Ör: NM_004333.6:c.1799T>A (p.Val600Glu)'); return; }
     const [,ref,lvl,pos,chg='',prot='']=m;
-    out.style.display='block';
-    out.innerHTML=`
-      <div class="ex-title">Ayrıştırma</div>
-      <div>Referans: <span class="token" data-token="ref" data-val="${ref}">${ref}</span></div>
-      <div>Düzey: <span class="token" data-token="level${lvl}">${lvl}.</span></div>
-      <div>Pozisyon: <span class="token" data-token="pos" data-val="${pos}">${pos}</span></div>
-      ${chg?`<div>Değişim: <span class="token" data-token="${chg.includes('>')?'gt':(chg.startsWith('del')?'del':chg.startsWith('ins')?'ins':chg.startsWith('dup')?'dup':chg.startsWith('inv')?'inv':'change')}" data-val="${chg}">${chg}</span></div>`:''}
-      ${prot?`<div>Protein: <span class="token" data-token="aa" data-val="${prot.replace(/^p\\./,'')}">${prot}</span></div>`:''}
+    out.innerHTML = `
+      <div class="tcard">
+        <div class="t-h">Ayrıştırma</div>
+        <div class="t-d">Referans: <span class="token" data-token="ref" data-val="${ref}">${ref}</span></div>
+        <div class="t-d">Düzey: <span class="token" data-token="level${lvl}">${lvl}.</span></div>
+        <div class="t-d">Pozisyon: <span class="token" data-token="pos" data-val="${pos}">${pos}</span></div>
+        ${chg?`<div class="t-d">Değişim: <span class="token" data-token="${chg.includes('>')?'gt':(chg.startsWith('del')?'del':chg.startsWith('ins')?'ins':chg.startsWith('dup')?'dup':chg.startsWith('inv')?'inv':'change')}" data-val="${chg}">${chg}</span></div>`:''}
+        ${prot?`<div class="t-d">Protein: <span class="token" data-token="aa" data-val="${prot.replace(/^p\\./,'')}">${prot}</span></div>`:''}
+      </div>
     `;
+    out.parentElement.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
-  if(e.target.id==='anClr'){ document.getElementById('anIn').innerText=''; document.getElementById('anOut').style.display='none'; }
+  if(e.target.id==='anClr'){ document.getElementById('anIn').innerText=''; document.getElementById('anOut').innerHTML=''; }
 });
 </script>
 </body>
