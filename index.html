@@ -45,7 +45,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 .ex-title .token{background:var(--ok);font-weight:800}
 .code{background:var(--panel);border:1px solid var(--border);padding:10px;border-radius:10px;white-space:pre-wrap;word-break:break-word}
 
-/* colored base highlights / edit viz */
+/* edit viz */
 .base-old{color:#fff;background:var(--old);padding:0 .25em;border-radius:.35em}
 .base-new{color:#fff;background:var(--new);padding:0 .25em;border-radius:.35em}
 .base-del{color:#fff;background:var(--del);text-decoration:line-through;padding:0 .22em;border-radius:.35em}
@@ -60,7 +60,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 .sw-dna{background:var(--dna)} .sw-rna{background:var(--rna)} .sw-prot{background:var(--prot)}
 .sw-del{background:var(--del)} .sw-ins{background:var(--ins)}
 
-/* inline explanation slot (per section; mobile default) */
+/* inline explanation slot (mobile default) */
 .explain-slot{margin-top:8px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .ex-head{background:var(--chip);padding:10px 12px;font-weight:800;display:flex;align-items:center;gap:8px}
 .ex-body{padding:12px;display:grid;gap:10px}
@@ -205,7 +205,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
         <section class="section" id="s6">
           <div class="sec-title"><span>6. Füzyon</span></div>
           <div class="code mono"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span> — <span class="token" data-token="fusionIso" data-val="e13a2">e13a2</span></div>
-          <div class="tip">Rapor: kırpım noktası/izoform, yöntem (RNA-seq/RT-PCR/FISH) ve tedavi ilişkilendirmesi (TKI) belirtilmeli.</div>
+          <div class="tip">Rapor: kırpım noktası/izoform, yöntem (RNA-seq/RT-PCR/FISH) ve tedavi ilişkilendirmesi belirtilmeli.</div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
 
@@ -229,80 +229,76 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
         <section class="section" id="s8">
           <div class="sec-title"><span>8. Örnekler (uzun açıklamalı)</span></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_braf">BRAF V600E</span></div>
-            <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>:<span class="token" data-token="levelc">c.</span>1799<span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span> ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
-          </div>
+          <!-- Önceki örnekler -->
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_braf">BRAF V600E</span></div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>:<span class="token" data-token="levelc">c.</span>1799<span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span> ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_egfr_l858r">EGFR L858R</span></div>
-            <div class="code mono">EGFR <span class="token" data-token="levelc">c.</span>2573<span class="token" data-token="gt" data-val="T>G"><span class="base-old">T</span>&gt;<span class="base-new">G</span></span> ( <span class="token" data-token="levelp">p.</span>Leu858Arg )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_egfr_l858r">EGFR L858R</span></div>
+            <div class="code mono">EGFR <span class="token" data-token="levelc">c.</span>2573<span class="token" data-token="gt" data-val="T>G"><span class="base-old">T</span>&gt;<span class="base-new">G</span></span> ( p.Leu858Arg )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_kras_g12d">KRAS G12D</span></div>
-            <div class="code mono">KRAS <span class="token" data-token="levelc">c.</span>35<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Gly12Asp )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_kras_g12d">KRAS G12D</span></div>
+            <div class="code mono">KRAS <span class="token" data-token="levelc">c.</span>35<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Gly12Asp )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_idh1_r132h">IDH1 R132H</span></div>
-            <div class="code mono">IDH1 <span class="token" data-token="levelc">c.</span>395<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Arg132His )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_idh1_r132h">IDH1 R132H</span></div>
+            <div class="code mono">IDH1 <span class="token" data-token="levelc">c.</span>395<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Arg132His )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_pik3ca_e545k">PIK3CA E545K</span></div>
-            <div class="code mono">PIK3CA <span class="token" data-token="levelc">c.</span>1633<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Glu545Lys )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_pik3ca_e545k">PIK3CA E545K</span></div>
+            <div class="code mono">PIK3CA <span class="token" data-token="levelc">c.</span>1633<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Glu545Lys )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_tp53_r175h">TP53 R175H</span></div>
-            <div class="code mono">TP53 <span class="token" data-token="levelc">c.</span>524<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Arg175His )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_tp53_r175h">TP53 R175H</span></div>
+            <div class="code mono">TP53 <span class="token" data-token="levelc">c.</span>524<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Arg175His )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_brac1_185delag">BRCA1 185delAG</span></div>
-            <div class="code mono">BRCA1 <span class="token" data-token="levelc">c.</span>68_69<span class="token" data-token="del" data-val="AG">del</span><span class="base-del">AG</span> ( p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17 )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_brac1_185delag">BRCA1 185delAG</span></div>
+            <div class="code mono">BRCA1 <span class="token" data-token="levelc">c.</span>68_69<span class="token" data-token="del" data-val="AG">del</span><span class="base-del">AG</span> ( p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17 )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_cftr_f508del">CFTR F508del</span></div>
-            <div class="code mono">CFTR <span class="token" data-token="levelc">c.</span>1521_1523<span class="token" data-token="del" data-val="CTT">del</span><span class="base-del">CTT</span> ( p.Phe508del )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_cftr_f508del">CFTR F508del</span></div>
+            <div class="code mono">CFTR <span class="token" data-token="levelc">c.</span>1521_1523<span class="token" data-token="del" data-val="CTT">del</span><span class="base-del">CTT</span> ( p.Phe508del )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_erbb2_ins">ERBB2 exon20 insertion</span></div>
-            <div class="code mono">ERBB2 <span class="token" data-token="levelc">c.</span>2310_2311<span class="token" data-token="ins" data-val="GGT">ins</span><span class="base-ins">GGT</span> ( örn. p.Ala775_Gly776insGly )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_erbb2_ins">ERBB2 exon20 insertion</span></div>
+            <div class="code mono">ERBB2 <span class="token" data-token="levelc">c.</span>2310_2311<span class="token" data-token="ins" data-val="GGT">ins</span><span class="base-ins">GGT</span> ( örn. p.Ala775_Gly776insGly )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_flt3_itd">FLT3-ITD</span></div>
-            <div class="code mono">FLT3 <span class="dup-box">ex14_15 <span class="token" data-token="dup">dup</span></span> ( Internal Tandem Duplication )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_flt3_itd">FLT3-ITD</span></div>
+            <div class="code mono">FLT3 <span class="dup-box">ex14_15 <span class="token" data-token="dup">dup</span></span> ( Internal Tandem Duplication )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_npm1_ins">NPM1 Type A ins</span></div>
-            <div class="code mono">NPM1 <span class="token" data-token="levelc">c.</span>860_863<span class="token" data-token="ins" data-val="TCTG">ins</span><span class="base-ins">TCTG</span> ( p.Trp288CysfsTer12 )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_npm1_ins">NPM1 Type A ins</span></div>
+            <div class="code mono">NPM1 <span class="token" data-token="levelc">c.</span>860_863<span class="token" data-token="ins" data-val="TCTG">ins</span><span class="base-ins">TCTG</span> ( p.Trp288CysfsTer12 )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_met_ex14">MET Exon 14 skipping</span></div>
-            <div class="code mono">MET <span class="token" data-token="levelc">c.</span>3028<span class="token" data-token="minus" data-val="-1">-1</span>G>A (splice) → Exon 14 skipping</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_met_ex14">MET Exon 14 skipping</span></div>
+            <div class="code mono">MET <span class="token" data-token="levelc">c.</span>3028<span class="token" data-token="minus" data-val="-1">-1</span>G>A (splice) → Exon 14 skipping</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_hbb_hbs">HBB HbS (Sickle)</span></div>
-            <div class="code mono">HBB <span class="token" data-token="levelc">c.</span>20<span class="token" data-token="gt" data-val="A>T"><span class="base-old">A</span>&gt;<span class="base-new">T</span></span> ( p.Glu7Val )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_hbb_hbs">HBB HbS (Sickle)</span></div>
+            <div class="code mono">HBB <span class="token" data-token="levelc">c.</span>20<span class="token" data-token="gt" data-val="A>T"><span class="base-old">A</span>&gt;<span class="base-new">T</span></span> ( p.Glu7Val )</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_tert_prom">TERT promoter</span></div>
-            <div class="code mono">TERT <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span><span class="token" data-token="gt" data-val="C>T"><span class="base-old">C</span>&gt;<span class="base-new">T</span></span> (C228T)</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_tert_prom">TERT promoter</span></div>
+            <div class="code mono">TERT <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span><span class="token" data-token="gt" data-val="C>T"><span class="base-old">C</span>&gt;<span class="base-new">T</span></span> (C228T)</div></div>
 
-          <div class="example">
-            <div class="ex-title"><span class="token" data-token="ex_delins_alt">delins (alternatif)</span></div>
-            <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span><span class="base-del">TT</span>→<span class="base-ins">AG</span> ( p.Val600_Val601delinsArgGly )</div>
-          </div>
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_delins_alt">delins (alternatif)</span></div>
+            <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span><span class="base-del">TT</span>→<span class="base-ins">AG</span> ( p.Val600_Val601delinsArgGly )</div></div>
+
+          <!-- YENİ: Özel mutasyonlar (detaylı) -->
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_egfr_ex19del">EGFR Exon 19 delesyon (E746_A750del)</span></div>
+            <div class="code mono">EGFR <span class="token" data-token="levelc">c.</span>2235_2249<span class="token" data-token="del" data-val="15bp">del</span> ( p.Glu746_Ala750del )</div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_alk_eml4">EML4::ALK füzyon</span></div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="EML4">EML4</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ALK">ALK</span> — <span class="token" data-token="fusionIso" data-val="E13;A20">E13;A20</span></div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_ret_kif5b">KIF5B::RET füzyon</span></div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="KIF5B">KIF5B</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="RET">RET</span> — <span class="token" data-token="fusionIso" data-val="K16;R12">K16;R12</span></div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_ros1_cd74">CD74::ROS1 füzyon</span></div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="CD74">CD74</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ROS1">ROS1</span> — <span class="token" data-token="fusionIso" data-val="C6;R34">C6;R34</span></div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_nras_q61r">NRAS Q61R</span></div>
+            <div class="code mono">NRAS <span class="token" data-token="levelc">c.</span>182<span class="token" data-token="gt" data-val="A>G"><span class="base-old">A</span>&gt;<span class="base-new">G</span></span> ( p.Gln61Arg )</div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_nras_q61k">NRAS Q61K</span></div>
+            <div class="code mono">NRAS <span class="token" data-token="levelc">c.</span>181<span class="token" data-token="gt" data-val="C>A"><span class="base-old">C</span>&gt;<span class="base-new">A</span></span> ( p.Gln61Lys )</div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_kit_d816v">KIT D816V</span></div>
+            <div class="code mono">KIT <span class="token" data-token="levelc">c.</span>2447<span class="token" data-token="gt" data-val="A>T"><span class="base-old">A</span>&gt;<span class="base-new">T</span></span> ( p.Asp816Val )</div></div>
+
+          <div class="example"><div class="ex-title"><span class="token" data-token="ex_jak2_v617f">JAK2 V617F</span></div>
+            <div class="code mono">JAK2 <span class="token" data-token="levelc">c.</span>1849<span class="token" data-token="gt" data-val="G>T"><span class="base-old">G</span>&gt;<span class="base-new">T</span></span> ( p.Val617Phe )</div></div>
 
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
@@ -349,7 +345,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 </div>
 
 <script>
-/* ---------- Yardımcı renklendirme/şablonlar ---------- */
+/* ---------- Yardımcı renklendirme ---------- */
 function colorSwapString(val){
   const m = (val||'').match(/^([ACGT\*])>([ACGT\*])$/i);
   if(!m) return val||'A>G';
@@ -386,7 +382,7 @@ function tokenInfo(kind,val){
       b:'Tek baz (n) veya aralık (n_m). Aralıklar dâhildir: hem başlangıç hem bitiş pozisyonu değişime dahildir.',
       e:`c.<mark>${val||'1799'}</mark>`},
 
-    /* mutasyon tipleri (renkli gösterim) */
+    /* mutasyon tipleri */
     gt:{t:'> — Yer değiştirme (Substitution)',
       b:`Tek nükleotidin başka bir nükleotid ile değiştiğini belirtir. Basitçe “eski baz yerine yeni baz geldi”. Örn: ${colorSwapString('T>A')}. Etki: missense / nonsense / eşanlamlı olabilir.`,
       e:`c.1799${swap}`},
@@ -421,11 +417,11 @@ function tokenInfo(kind,val){
       b:"c.92-1 acceptor çekirdeği; c.-n ise ATG öncesi 5′ UTR konumudur.",
       e:'c.92<mark>-1</mark>G>A · c.<mark>-124</mark>C>T'},
     dcolon:{t:':: — Füzyon ayırıcı',
-      b:'GENE1::GENE2 yazımı, transkript düzeyinde birleşmiş iki geni gösterir. İzoform (e13a2 vb.) ve yöntem raporda yer almalı.',
+      b:'GENE1::GENE2 yazımı, transkript düzeyinde birleşmiş iki geni gösterir. İzoform (E13;A20 vb.) ve yöntem raporda yer almalı.',
       e:'BCR<mark>::</mark>ABL1'},
     fusionIso:{t:'Füzyon izoformu',
-      b:'e13a2/e14a2 gibi notasyonlar, ekzon-ekzon birleşimlerini tanımlar (örn. BCR ekzon 13 → ABL1 ekzon 2).',
-      e:'BCR::ABL1 <mark>e13a2</mark>'},
+      b:'E13;A20/E6;A20 vb. notasyonlar, partner genlerin birleşen ekzonlarını belirtir.',
+      e:'EML4::ALK <mark>E13;A20</mark>'},
     aa:{t:'Amino asit değişimi',
       b:'Üç harfli AA kodu ile yazılır. p.(=) eşanlamlı, p.? belirsiz etki demektir.',
       e:`p.<mark>${(val||'Val600Glu').replace(/^p\./,'')}</mark>`},
@@ -433,84 +429,135 @@ function tokenInfo(kind,val){
       b:'A>G, del, ins, dup, delins, inv vb. HGVS kurallarına uygun yazılmalıdır.',
       e:`c.123<mark>${val||'A>G'}</mark>`},
 
-    /* ---- Uzun örnek açıklamaları ---- */
+    /* ---- Uzun özel örnek açıklamaları ---- */
     ex_braf:{t:'BRAF V600E — Ayrıntılı okuma',
       b:`DNA: c.1799${colorSwapString('T>A')} → Kodon GTG(Val) → GAG(Glu).
       Protein: p.Val600Glu — aktivasyon döngüsündeki 600. kalıntı değişir; BRAF kinaz aktivitesi artar, MAPK/ERK yolu konstitutif aktive olur.
-      Klinik: Melanom, PTC, KRK vb. onkojenik sürücü; BRAF ± MEK inhibitörleri ile hedeflenebilir.
-      Rapor: accession.version, genom sürümü, eşleşen p. ifadesi, VAF/kapsam bilgisi.`,
+      Klinik: Melanom, PTC, KRK vb. onkojenik sürücü; BRAF ± MEK inhibitörleri ile hedeflenebilir.`,
       e:`NM_004333.6:c.1799${colorSwapString('T>A')} (p.Val600Glu)`},
 
-    ex_egfr_l858r:{t:'EGFR L858R — TKİ duyarlı',
+    ex_egfr_l858r:{t:'EGFR L858R — TKİ duyarlılık',
       b:`DNA: c.2573${colorSwapString('T>G')} → CTG(Leu) → CGG(Arg).
-      Klinik: Akciğer adenokarsinomunda TKİ (erlotinib, gefitinib, afatinib, osimertinib) duyarlılığı ile ilişkili.
-      Not: Raporlarda eşlik eden exon19 delesyon/ins varyantları ile ayırıcı yazım önemlidir.`,
+      Protein: p.Leu858Arg — tirozin kinaz domeninde aktivite artışı.
+      Klinik: Akciğer adenokarsinomunda TKİ (osimertinib vb.) duyarlılığı ile ilişkili.`,
       e:`EGFR:c.2573${colorSwapString('T>G')} (p.Leu858Arg)`},
 
-    ex_kras_g12d:{t:'KRAS G12D — MAPK aktivasyonu',
+    ex_kras_g12d:{t:'KRAS G12D — MAPK sürücü',
       b:`DNA: c.35${colorSwapString('G>A')} → GGT(Gly) → GAT(Asp).
-      Klinik: Kolorektal ve pankreas kanserlerinde sık; anti-EGFR tedavilerine direnç ile ilişkilidir.`,
+      Klinik: KRK/pankreas başta; anti-EGFR direnci ile ilişkilidir.`,
       e:`KRAS:c.35${colorSwapString('G>A')} (p.Gly12Asp)`},
 
-    ex_idh1_r132h:{t:'IDH1 R132H — Onkometabolit (2-HG)',
+    ex_idh1_r132h:{t:'IDH1 R132H — 2-HG üretimi',
       b:`DNA: c.395${colorSwapString('G>A')} → CGT(Arg) → CAT(His).
-      Klinik: Diffüz gliomlarda tipik; tanısal/prognostik değer taşır; inhibitörler mevcuttur.`,
+      Klinik: Diffüz gliomlarda tanısal ve prognostik; inhibitör tedaviler mevcuttur.`,
       e:`IDH1:c.395${colorSwapString('G>A')} (p.Arg132His)`},
 
     ex_pik3ca_e545k:{t:'PIK3CA E545K — PI3K aktivasyonu',
       b:`DNA: c.1633${colorSwapString('G>A')} → GAA(Glu) → AAA(Lys).
-      Klinik: Meme, kolorektal vb.; PI3K/AKT/mTOR yolunda aktivasyon; belirli tedavilere adaylık yaratabilir.`,
+      Klinik: Meme/KRK; PI3K/AKT/mTOR yolunda artış; hedefli seçenekler değerlendirilebilir.`,
       e:`PIK3CA:c.1633${colorSwapString('G>A')} (p.Glu545Lys)`},
 
     ex_tp53_r175h:{t:'TP53 R175H — Tümör baskılayıcı kaybı',
       b:`DNA: c.524${colorSwapString('G>A')} → CGC(Arg) → CAC(His).
-      Klinik: Yüksek onkogenik risk; yaygın tümörlerde görülen sürücü mutasyonlardan biri.`,
+      Klinik: Yaygın ve yüksek etkili sürücü; dominant-negatif/GOF etkiler rapor edilmiştir.`,
       e:`TP53:c.524${colorSwapString('G>A')} (p.Arg175His)`},
 
     ex_brac1_185delag:{t:'BRCA1 185delAG (c.68_69delAG)',
-      b:`DNA: c.68_69del${colorDel('AG')} → okuma çerçevesi kayar → erken durdurma.
-      Klinik: Kalıtsal meme-yumurtalık kanseri sendromu; yüksek penetranslı patojenik varyant.`,
+      b:`DNA: c.68_69del${colorDel('AG')} — iki bazın silinmesi okuma çerçevesini kaydırır.
+      Protein: p.Glu23ValfsTer17 — kısa/trunkated protein.
+      Klinik: Kalıtsal meme-yumurtalık kanseri; patojenik kabul edilir.`,
       e:`BRCA1:c.68_69del${colorDel('AG')} (p.Glu23ValfsTer17)`},
 
     ex_cftr_f508del:{t:'CFTR p.Phe508del (c.1521_1523delCTT)',
-      b:`DNA: c.1521_1523del${colorDel('CTT')} → kodon kaybı.
-      Protein: p.Phe508del — katlanma/trafficking bozukluğu; kistik fibrozis ana varyantı.`,
+      b:`DNA: c.1521_1523del${colorDel('CTT')} — bir kodonluk silme.
+      Protein: p.Phe508del — katlanma/trafficking bozukluğu; Kistik Fibrozis’te en sık varyant.`,
       e:`CFTR:c.1521_1523del${colorDel('CTT')} (p.Phe508del)`},
 
-    ex_erbb2_ins:{t:'ERBB2 Exon 20 – İnsersiyon',
-      b:`DNA: exon20 çevresinde insersiyon (ör. c.2310_2311ins${colorIns('GGT')}).
-      Klinik: Akciğer adeno. alt grubu; belirli HER2 hedefli ajanlar için adaylık sağlayabilir.`,
+    ex_erbb2_ins:{t:'ERBB2 Exon 20 ins',
+      b:`DNA: c.2310_2311ins${colorIns('GGT')} gibi insersiyonlar.
+      Protein: p.Ala775_Gly776insGly — döngüde kısmi uzama, aktivite artışı.
+      Klinik: Akciğer adenokarsinom alt grubu; HER2 hedefli ajanlar değerlendirilebilir.`,
       e:`ERBB2:c.2310_2311ins${colorIns('GGT')} (p.Ala775_Gly776insGly)`},
 
     ex_flt3_itd:{t:'FLT3-ITD — Dahili tandem duplikasyon',
-      b:`Genellikle juxtamembran bölgesinde tekrar (dup) oluşur; tirozin kinaz aktivitesi artar.
-      Klinik: AML’de kötü prognostik; hedefli tedaviler mevcuttur.`,
+      b:`Genellikle juxtamembran bölgede tekrar (dup); tirozin kinaz aktivitesi artar.
+      Klinik: AML’de kötü prognostik; hedefli tedaviler mevcut.`,
       e:`FLT3:ex14_15 <span class="dup-box">dup</span>`},
 
     ex_npm1_ins:{t:'NPM1 Tip A ins (c.860_863insTCTG)',
-      b:`DNA: c.860_863ins${colorIns('TCTG')} → frameshift.
-      Klinik: AML’de sık; özgün ekspresyon paterni; tanısal değeri yüksektir.`,
+      b:`DNA: c.860_863ins${colorIns('TCTG')} → frameshift ve yeni C-ucu motif.
+      Klinik: AML’de özgün fenotip; tanısal değeri yüksektir.`,
       e:`NPM1:c.860_863ins${colorIns('TCTG')} (p.Trp288CysfsTer12)`},
 
-    ex_met_ex14:{t:'MET exon 14 skipping — Splice kaybı',
+    ex_met_ex14:{t:'MET Exon 14 skipping — Splice kaybı',
       b:`Çoğunlukla acceptor/donor çekirdeği değişimi (örn. c.3028-1G>A) sonucu ekzon 14 atlanır.
-      Klinik: Akciğer kanserinde MET inhibitörlerine duyarlılık ile ilişkilidir.`,
+      Protein: Yüzey reseptöründe CBL bağlanma bölgesi kaybı → parçalanma azalır.
+      Klinik: MET inhibitörlerine duyarlılık.`,
       e:`MET:c.3028-1${colorSwapString('G>A')} → Exon 14 skipping`},
 
     ex_hbb_hbs:{t:'HBB HbS (p.Glu7Val)',
       b:`DNA: c.20${colorSwapString('A>T')} → GAG(Glu) → GTG(Val).
-      Klinik: Orak hücreli anemi; hemoglobin polimerizasyonu, hemoliz ve vaso-oklüzif krizlerle seyreder.`,
+      Klinik: Orak hücreli anemi (polimerizasyon, hemoliz).`,
       e:`HBB:c.20${colorSwapString('A>T')} (p.Glu7Val)`},
 
     ex_tert_prom:{t:'TERT promoter c.-124C>T (C228T)',
-      b:`ATG öncesi promotör/5′ UTR bölgesi; ETS TF bağlanmasını artırabilir → TERT ekspresyonu artar.
-      Klinik: Melanom, gliom ve tiroid kanseri dahil birçok tümörde görülür.`,
+      b:`ATG öncesi promotör/5′ UTR; ETS TF bağlanması artar → TERT ekspresyonu artabilir.
+      Klinik: Melanom, gliom, tiroid kanseri vb.`,
       e:`TERT:c.-124${colorSwapString('C>T')} (C228T)`},
 
     ex_delins_alt:{t:'delins — Amino asit düzeyi etkisi',
-      b:`c.1799_1800delinsAG gibi bir değişim, protein düzeyinde karşılık gelen aralıkta delins (örn. p.Val600_Val601delinsArgGly) olarak yazılabilir.
-      Etki çerçeveye ve konuma bağlıdır.`,
+      b:`c.1799_1800delinsAG: aralık silinir, yerine “AG” eklenir. Protein düzeyinde p.Val600_Val601delinsArgGly gibi bir sonuç oluşabilir.`,
       e:`c.1799_1800delins${colorIns('AG')} → p.Val600_Val601delinsArgGly`},
+
+    /* === YENİ Özel Mutasyon Açıklamaları === */
+    ex_egfr_ex19del:{t:'EGFR Exon 19 delesyon (E746_A750del)',
+      b:`DNA: c.2235_2249<del> (tipik 15 bp) — EGFR tirozin kinaz domeninde kısa bir silme.
+      Kodon düzeyi: Glu746-Ala750 arasındaki segment çıkar (örn. ELREA motifinin kaybı).
+      Protein: p.Glu746_Ala750del (E746_A750del).
+      Klinik: Güçlü aktivasyon ve TKİ (gefitinib/erlotinib/afatinib/osimertinib) duyarlılığı; raporda delesyonun tam HGVS aralığı ve referans transkript belirtilmeli.`,
+      e:`EGFR:c.2235_2249<del> → p.Glu746_Ala750del`},
+
+    ex_alk_eml4:{t:'EML4::ALK — E13;A20 örneği',
+      b:`Füzyon: <b>EML4</b> ekzon 13 ile <b>ALK</b> ekzon 20 birleşir.
+      Sonuç: ALK kinaz domeni, EML4 oligomerizasyon bölgeleri ile birleşerek konstitutif aktivasyona yol açar.
+      Klinik: NSCLC’de hedeflenebilir (ALK inhibitörleri: crizotinib, alectinib, lorlatinib).
+      Rapor: EML4::ALK <i>E13;A20</i> biçiminde izoformla, tespit yöntemi ve VAF ile veriniz.`,
+      e:`EML4::ALK <mark>E13;A20</mark>`},
+
+    ex_ret_kif5b:{t:'KIF5B::RET — K16;R12',
+      b:`Füzyon: <b>KIF5B</b> ekzon 16 — <b>RET</b> ekzon 12.
+      Etki: RET kinaz aktivitesi artar; dimerizasyon KIF5B coiled-coil alanıyla kolaylaşır.
+      Klinik: RET inhibitörlerine (selpercatinib, pralsetinib) duyarlılık.`,
+      e:`KIF5B::RET <mark>K16;R12</mark>`},
+
+    ex_ros1_cd74:{t:'CD74::ROS1 — C6;R34',
+      b:`Füzyon: <b>CD74</b> ekzon 6 — <b>ROS1</b> ekzon 34.
+      Etki: ROS1 kinaz aktivasyonu; TKİ (crizotinib, entrectinib) seçenekleri.
+      Not: Genomik kırpım noktası ve okunma çerçevesi korunumu raporda belirtilmeli.`,
+      e:`CD74::ROS1 <mark>C6;R34</mark>`},
+
+    ex_nras_q61r:{t:'NRAS Q61R — GTPaz aktivitesi bozulur',
+      b:`DNA: c.182${colorSwapString('A>G')} → CAA(Gln) → CGA(Arg).
+      Etki: GTP’ye bağlı aktif formun uzaması; MAPK yolunda konstitutif sinyal.
+      Klinik: Melanom/KRK’de sıktır; anti-EGFR direnci ile ilişkilidir.`,
+      e:`NRAS:c.182${colorSwapString('A>G')} (p.Gln61Arg)`},
+
+    ex_nras_q61k:{t:'NRAS Q61K — Benzer mekanizma',
+      b:`DNA: c.181${colorSwapString('C>A')} → CAA(Gln) → AAA(Lys).
+      Etki: Q61R gibi GTPaz döngüsü bozulur; kalıcı aktivasyon.`,
+      e:`NRAS:c.181${colorSwapString('C>A')} (p.Gln61Lys)`},
+
+    ex_kit_d816v:{t:'KIT D816V — Aktivasyon döngüsü',
+      b:`DNA: c.2447${colorSwapString('A>T')} → GAC(Asp) → GTC(Val).
+      Bölge: Aktivasyon döngüsü (A-loop); otoinhibisyon kalkar, kinaz aktivitesi artar.
+      Klinik: Sistemik mastositoz ve GIST alt tiplerinde tipik; bazı TKİ’lere dirençli, özgül inhibitörler tercih edilir.`,
+      e:`KIT:c.2447${colorSwapString('A>T')} (p.Asp816Val)`},
+
+    ex_jak2_v617f:{t:'JAK2 V617F — Pseudokinaz domeninde aktiflik',
+      b:`DNA: c.1849${colorSwapString('G>T')} → GTG(Val) → TTT(Phe).
+      Etki: Pseudokinaz (JH2) domenindeki değişim negatif regülasyonu bozar → JAK-STAT yolu aktive.
+      Klinik: Polisitemia vera/ET/PMF gibi MPN’lerde karakteristiktir.`,
+      e:`JAK2:c.1849${colorSwapString('G>T')} (p.Val617Phe)`}
   };
   return d[kind]||{t:'Açıklama',b:val||'—',e:''};
 }
