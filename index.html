@@ -17,9 +17,13 @@ a{color:var(--primary2);text-decoration:none}
 code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 
 /* header minimalist */
-.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:12px}
+.wrap{max-width:1200px;margin:0 auto;padding:16px;display:grid;gap:12px}
 .header{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px 16px}
 .h-title{font-weight:900;font-size:clamp(22px,4.5vw,34px);color:var(--primary)}
+
+/* GRID: mobile = tek sütun; desktop = içerik + sağ panel */
+.main-grid{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:1120px){ .main-grid{grid-template-columns:1fr 340px} }
 
 /* content card */
 .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}
@@ -38,7 +42,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 .ex-title{font-weight:800;margin-bottom:6px}
 .code{background:var(--panel);border:1px solid var(--border);padding:10px;border-radius:10px;white-space:pre-wrap;word-break:break-word}
 
-/* inline explanation slot (per section) */
+/* inline explanation slot (per section; mobile default) */
 .explain-slot{margin-top:8px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .ex-head{background:var(--chip);padding:10px 12px;font-weight:800;display:flex;align-items:center;gap:8px}
 .ex-body{padding:12px;display:grid;gap:8px}
@@ -53,7 +57,17 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 .tip{background:var(--ok);border-left:4px solid #10b981;padding:10px;border-radius:8px;font-size:14px}
 .warn{background:var(--warn);border-left:4px solid #f59e0b;padding:10px;border-radius:8px;font-size:14px}
 
-/* footer (links+badges moved here) */
+/* RIGHT PANEL (desktop only) */
+.side-panel{display:none}
+@media(min-width:1120px){
+  .side-panel{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border);border-radius:14px;position:sticky;top:16px;height:max-content}
+  .p-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-weight:900;color:var(--primary)}
+  .p-body{padding:12px 14px;display:grid;gap:10px}
+  /* desktopta inline açıklamaları gizle (yan panel kullanılacak) */
+  .section .explain-slot{display:none}
+}
+
+/* footer (links moved to bottom) */
 .footer{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
 .links{display:flex;gap:8px;flex-wrap:wrap}
 .link{background:var(--chip);border:1px solid var(--border);padding:8px 12px;border-radius:999px;font-size:13px}
@@ -65,164 +79,173 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 <div class="wrap">
   <header class="header"><div class="h-title">NGS Varyant Yazımı — Öğretici</div></header>
 
-  <main class="card">
-    <div class="c-head">
-      <div class="c-title">1 → 8: Girişten örneklere tek sayfa</div>
-      <small class="small mono"><i class="fa fa-scroll"></i> kaydırarak ilerle</small>
-    </div>
-    <div class="c-body">
+  <div class="main-grid">
+    <!-- CONTENT -->
+    <main class="card">
+      <div class="c-head">
+        <div class="c-title">1 → 8: Girişten örneklere tek sayfa</div>
+        <small class="small mono" style="color:var(--muted)"><i class="fa fa-scroll"></i> kaydırarak ilerle</small>
+      </div>
+      <div class="c-body">
 
-      <!-- 1. GİRİŞ -->
-      <section class="section" id="s1">
-        <div class="sec-title"><span>1. Giriş</span></div>
-        <div>Standart HGVS/HGNC yazımı; raporlar ve veritabanları (ClinVar, gnomAD, COSMIC) arasında tutarlılık sağlar.</div>
-        <div class="example">
-          <div class="ex-title">Kısa kural</div>
-          <div class="code mono">[Referans]:[Düzey].[Tanım]  →  <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
-        </div>
-        <div class="explain-slot">
-          <div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div>
-          <div class="ex-body"></div>
-        </div>
-      </section>
-
-      <!-- 2. SEMBOLLER -->
-      <section class="section" id="s2">
-        <div class="sec-title"><span>2. Semboller</span></div>
-        <div class="tokens">
-          <span class="token" data-token="gt">&gt;</span>
-          <span class="token" data-token="del">del</span>
-          <span class="token" data-token="ins">ins</span>
-          <span class="token" data-token="dup">dup</span>
-          <span class="token" data-token="delins">delins</span>
-          <span class="token" data-token="inv">inv</span>
-          <span class="token" data-token="fs">fs</span>
-          <span class="token" data-token="ter">Ter</span>
-          <span class="token" data-token="asterisk">*</span>
-          <span class="token" data-token="plus">+1</span>
-          <span class="token" data-token="minus" data-val="-1">-1</span>
-        </div>
-        <div class="example">
-          <div class="ex-title">Mini örnekler</div>
-          <div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A</div>
-          <div class="code mono">c.68_69<span class="token" data-token="del">del</span>AG</div>
-          <div class="code mono">c.123_124<span class="token" data-token="ins">ins</span>T</div>
-          <div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div>
-          <div class="code mono">c.<span class="token" data-token="asterisk" data-val="*5">*5</span>G>A</div>
-        </div>
-        <div class="warn">Excel uyarısı: MARCH1 gibi genler tarih biçimine dönüşebilir (1-Mar). CSV/TSV ve metin sütun kullanın.</div>
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- 3. KOORDİNATLAR -->
-      <section class="section" id="s3">
-        <div class="sec-title"><span>3. Koordinatlar</span></div>
-        <div class="tokens">
-          <span class="token" data-token="levelg">g.</span>
-          <span class="token" data-token="levelc">c.</span>
-          <span class="token" data-token="leveln">n.</span>
-          <span class="token" data-token="levelp">p.</span>
-        </div>
-        <div class="example">
-          <div class="ex-title">Örnekler</div>
-          <div class="code mono"><span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelg">g.</span>140453136<span class="token" data-token="gt">&gt;</span>T</div>
-          <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A</div>
-          <div class="code mono"><span class="token" data-token="ref" data-val="NP_004324.2">NP_004324.2</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div>
-        </div>
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- 4. VARYANT TİPLERİ -->
-      <section class="section" id="s4">
-        <div class="sec-title"><span>4. Varyant Tipleri</span></div>
-        <div class="example"><div class="ex-title">SNV</div><div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A — p.<span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div></div>
-        <div class="example"><div class="ex-title">Silme</div><div class="code mono">c.1799_1801<span class="token" data-token="del">del</span></div></div>
-        <div class="example"><div class="ex-title">Ekleme</div><div class="code mono">c.1799_1800<span class="token" data-token="ins">ins</span>T</div></div>
-        <div class="example"><div class="ex-title">Çoğaltma</div><div class="code mono">c.100_102<span class="token" data-token="dup">dup</span></div></div>
-        <div class="example"><div class="ex-title">delins</div><div class="code mono">c.1799_1800<span class="token" data-token="delins">delins</span>AG</div></div>
-        <div class="example"><div class="ex-title">Frameshift</div><div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div></div>
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- 5. SPLICE / UTR -->
-      <section class="section" id="s5">
-        <div class="sec-title"><span>5. Splice/UTR</span></div>
-        <div class="code mono">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T (donor) · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (acceptor)</div>
-        <div class="code mono">5′ UTR: c.<span class="token" data-token="minus" data-val="-124">-124</span>C>T · 3′ UTR: c.<span class="token" data-token="asterisk" data-val="*2">*2</span>A>G</div>
-        <div class="tip">Protein etkisi belirsizse: <b>p.?</b> yazılabilir.</div>
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- 6. FÜZYON -->
-      <section class="section" id="s6">
-        <div class="sec-title"><span>6. Füzyon</span></div>
-        <div class="code mono"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span> — <span class="token" data-token="fusionIso" data-val="e13a2">e13a2</span></div>
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- 7. RAPORLAMA -->
-      <section class="section" id="s7">
-        <div class="sec-title"><span>7. Raporlama</span></div>
-        <div class="example">
-          <div class="ex-title">Örnek rapor parçası</div>
-          <div class="code mono">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
-          <ul style="padding-left:18px;margin-top:6px">
-            <li>Veritabanları: ClinVar, gnomAD, COSMIC</li>
-            <li>ACMG sınıfı + kanıt cümleleri</li>
-            <li>Yöntem/limitler (kapsama, VAF, hedef dışı bölgeler)</li>
-          </ul>
-        </div>
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- 8. ÖRNEKLER -->
-      <section class="section" id="s8">
-        <div class="sec-title"><span>8. Örnekler</span></div>
-
-        <div class="example">
-          <div class="ex-title">BRAF V600E</div>
-          <div class="code mono">
-            <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span><span class="token" data-token="pos" data-val="1799">1799</span>T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )
+        <!-- 1 -->
+        <section class="section" id="s1">
+          <div class="sec-title"><span>1. Giriş</span></div>
+          <div>Standart HGVS/HGNC yazımı; raporlar ve veritabanları (ClinVar, gnomAD, COSMIC) arasında tutarlılık sağlar.</div>
+          <div class="example">
+            <div class="ex-title">Kısa kural</div>
+            <div class="code mono">[Referans]:[Düzey].[Tanım] → <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
           </div>
-          <p>1799. pozisyonda T→A; protein düzeyinde Val→Glu (onkojenik).</p>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 2 -->
+        <section class="section" id="s2">
+          <div class="sec-title"><span>2. Semboller</span></div>
+          <div class="tokens">
+            <span class="token" data-token="gt">&gt;</span>
+            <span class="token" data-token="del">del</span>
+            <span class="token" data-token="ins">ins</span>
+            <span class="token" data-token="dup">dup</span>
+            <span class="token" data-token="delins">delins</span>
+            <span class="token" data-token="inv">inv</span>
+            <span class="token" data-token="fs">fs</span>
+            <span class="token" data-token="ter">Ter</span>
+            <span class="token" data-token="asterisk">*</span>
+            <span class="token" data-token="plus">+1</span>
+            <span class="token" data-token="minus" data-val="-1">-1</span>
+          </div>
+          <div class="example">
+            <div class="ex-title">Mini örnekler</div>
+            <div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A</div>
+            <div class="code mono">c.68_69<span class="token" data-token="del">del</span>AG</div>
+            <div class="code mono">c.123_124<span class="token" data-token="ins">ins</span>T</div>
+            <div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div>
+            <div class="code mono">c.<span class="token" data-token="asterisk" data-val="*5">*5</span>G>A</div>
+          </div>
+          <div class="warn">Excel uyarısı: MARCH1 gibi genler tarih biçimine dönüşebilir (1-Mar). CSV/TSV ve metin sütun kullanın.</div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 3 -->
+        <section class="section" id="s3">
+          <div class="sec-title"><span>3. Koordinatlar</span></div>
+          <div class="tokens">
+            <span class="token" data-token="levelg">g.</span>
+            <span class="token" data-token="levelc">c.</span>
+            <span class="token" data-token="leveln">n.</span>
+            <span class="token" data-token="levelp">p.</span>
+          </div>
+          <div class="example">
+            <div class="ex-title">Örnekler</div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelg">g.</span>140453136<span class="token" data-token="gt">&gt;</span>T</div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A</div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NP_004324.2">NP_004324.2</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div>
+          </div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 4 -->
+        <section class="section" id="s4">
+          <div class="sec-title"><span>4. Varyant Tipleri</span></div>
+          <div class="example"><div class="ex-title">SNV</div><div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A — p.<span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div></div>
+          <div class="example"><div class="ex-title">Silme</div><div class="code mono">c.1799_1801<span class="token" data-token="del">del</span></div></div>
+          <div class="example"><div class="ex-title">Ekleme</div><div class="code mono">c.1799_1800<span class="token" data-token="ins">ins</span>T</div></div>
+          <div class="example"><div class="ex-title">Çoğaltma</div><div class="code mono">c.100_102<span class="token" data-token="dup">dup</span></div></div>
+          <div class="example"><div class="ex-title">delins</div><div class="code mono">c.1799_1800<span class="token" data-token="delins">delins</span>AG</div></div>
+          <div class="example"><div class="ex-title">Frameshift</div><div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div></div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 5 -->
+        <section class="section" id="s5">
+          <div class="sec-title"><span>5. Splice/UTR</span></div>
+          <div class="code mono">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T (donor) · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (acceptor)</div>
+          <div class="code mono">5′ UTR: c.<span class="token" data-token="minus" data-val="-124">-124</span>C>T · 3′ UTR: c.<span class="token" data-token="asterisk" data-val="*2">*2</span>A>G</div>
+          <div class="tip">Protein etkisi belirsizse: <b>p.?</b> yazılabilir.</div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 6 -->
+        <section class="section" id="s6">
+          <div class="sec-title"><span>6. Füzyon</span></div>
+          <div class="code mono"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span> — <span class="token" data-token="fusionIso" data-val="e13a2">e13a2</span></div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 7 -->
+        <section class="section" id="s7">
+          <div class="sec-title"><span>7. Raporlama</span></div>
+          <div class="example">
+            <div class="ex-title">Örnek rapor parçası</div>
+            <div class="code mono">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
+            <ul style="padding-left:18px;margin-top:6px">
+              <li>Veritabanları: ClinVar, gnomAD, COSMIC</li>
+              <li>ACMG sınıfı + kanıt cümleleri</li>
+              <li>Yöntem/limitler (kapsama, VAF, hedef dışı bölgeler)</li>
+            </ul>
+          </div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- 8 -->
+        <section class="section" id="s8">
+          <div class="sec-title"><span>8. Örnekler</span></div>
+
+          <div class="example">
+            <div class="ex-title">BRAF V600E</div>
+            <div class="code mono">
+              <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span><span class="token" data-token="pos" data-val="1799">1799</span>T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )
+            </div>
+            <p>1799. pozisyonda T→A; protein düzeyinde Val→Glu (onkojenik).</p>
+          </div>
+
+          <div class="example">
+            <div class="ex-title">Splice acceptor</div>
+            <div class="code mono">HBB NM_000518.5:<span class="token" data-token="levelc">c.</span>92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (p.?)</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title">TERT promoter</div>
+            <div class="code mono">TERT: <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span>C>T (C228T)</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title">delins</div>
+            <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span>AG</div>
+          </div>
+
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
+        </section>
+
+        <!-- Hızlı analiz aracı -->
+        <section class="section" id="analyzer">
+          <div class="sec-title"><i class="fa fa-wand-magic-sparkles"></i> Hızlı Analiz</div>
+          <div class="code mono" id="anIn" contenteditable="true" aria-label="HGVS ifadesi giriniz">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
+          <div class="actions" style="margin-top:8px">
+            <button class="btn" id="anBtn">Analiz Et</button>
+            <button class="btn-sec" id="anClr">Temizle</button>
+          </div>
+          <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body" id="anOut"></div></div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- RIGHT EXPLANATION PANEL (desktop only) -->
+    <aside class="side-panel" aria-label="Açıklama paneli" id="deskPanel">
+      <div class="p-head"><i class="fa fa-circle-info"></i> Açıklama (PC)</div>
+      <div class="p-body">
+        <div class="tcard" id="dTokenCard">
+          <div class="t-h">Bir parçaya tıkla — burada açıklayalım</div>
+          <div class="t-d">Örnek: <span class="mono">NM_004333.6:c.1799T>A</span></div>
+          <div class="t-ex">Bileşene tıkladığında örnek ve açıklama değişir.</div>
         </div>
+      </div>
+    </aside>
+  </div>
 
-        <div class="example">
-          <div class="ex-title">Splice acceptor</div>
-          <div class="code mono">HBB NM_000518.5:<span class="token" data-token="levelc">c.</span>92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (p.?)</div>
-        </div>
-
-        <div class="example">
-          <div class="ex-title">TERT promoter</div>
-          <div class="code mono">TERT: <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span>C>T (C228T)</div>
-        </div>
-
-        <div class="example">
-          <div class="ex-title">delins</div>
-          <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span>AG</div>
-        </div>
-
-        <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
-      </section>
-
-      <!-- Hızlı analiz aracı (isteğe bağlı) -->
-      <section class="section" id="analyzer">
-        <div class="sec-title"><i class="fa fa-wand-magic-sparkles"></i> Hızlı Analiz</div>
-        <div class="code mono" id="anIn" contenteditable="true" aria-label="HGVS ifadesi giriniz">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
-        <div class="actions" style="margin-top:8px">
-          <button class="btn" id="anBtn">Analiz Et</button>
-          <button class="btn-sec" id="anClr">Temizle</button>
-        </div>
-        <div class="explain-slot">
-          <div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div>
-          <div class="ex-body" id="anOut"></div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- FOOTER: linkler ve rozetler burada -->
+  <!-- FOOTER: linkler altta -->
   <footer class="footer">
     <div class="links">
       <a class="link" target="_blank" href="https://hgvs-nomenclature.org/stable/recommendations/general/"><i class="fa fa-link"></i> HGVS Genel Öneriler</a>
@@ -266,17 +289,30 @@ function tokenInfo(kind,val){
   return d[kind]||{t:'Açıklama',b:val||'—',e:''};
 }
 
-/* aktif bölümün açıklama slotunu bul */
-function getSectionSlot(el){
-  const sec=el.closest('.section');
-  return sec? sec.querySelector('.ex-body') : null;
+/* desktop mu? */
+const mq = window.matchMedia('(min-width:1120px)');
+function isDesktop(){ return mq.matches; }
+
+/* sağ paneli güncelle (desktop) */
+function setDeskPanel(kind,val){
+  const info=tokenInfo(kind,val);
+  const d=document.getElementById('dTokenCard');
+  if(!d) return;
+  d.innerHTML=`
+    <div class="t-h">${info.t}</div>
+    <div class="t-d">${info.b}</div>
+    ${info.e?`<div class="t-ex mono">${info.e}</div>`:''}
+  `;
 }
 
-/* bir bölümün açıklamasını güncelle */
-function updateExplain(slot, kind, val){
+/* bölüm içi açıklamayı güncelle (mobile) */
+function getSectionSlot(el){
+  const sec=el.closest('.section'); return sec? sec.querySelector('.ex-body'):null;
+}
+function setInlineExplain(slot,kind,val){
   if(!slot) return;
   const info=tokenInfo(kind,val);
-  slot.innerHTML = `
+  slot.innerHTML=`
     <div class="tcard">
       <div class="t-h">${info.t}</div>
       <div class="t-d">${info.b}</div>
@@ -286,23 +322,34 @@ function updateExplain(slot, kind, val){
   slot.parentElement.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* token tıklama: bulunduğu bölümün açıklamasına yaz */
+/* tıklama yönlendirme: desktop→sağ panel, mobile→inline */
 document.addEventListener('click',e=>{
   const t=e.target.closest('.token'); if(!t) return;
-  const slot=getSectionSlot(t);
-  updateExplain(slot, t.dataset.token||'ref', t.dataset.val||t.textContent.trim());
+  const kind=t.dataset.token||'ref';
+  const val=t.dataset.val||t.textContent.trim();
+  if(isDesktop()){
+    setDeskPanel(kind,val);
+  }else{
+    const slot=getSectionSlot(t);
+    setInlineExplain(slot,kind,val);
+  }
 });
 
-/* hızlı analizör: çıktıyı kendi bölümünde göster */
+/* hızlı analizör */
 document.addEventListener('click',e=>{
   if(e.target.id==='anBtn'){
     const raw=document.getElementById('anIn').innerText.trim();
     const out=document.getElementById('anOut');
     const re=/^([^:]+):(c|g|n|p)\.\s*([^\s(]+)\s*([A-Za-z*>_]+(?:>[A-Za-z*])?|delins[A-Za-z]+|del|ins[A-Za-z]*|dup|inv)?(?:\s*\(\s*(p\.[^)]+)\s*\))?$/i;
     const m=raw.match(re);
-    if(!m){ updateExplain(out, 'change', 'Biçim tanınamadı. Ör: NM_004333.6:c.1799T>A (p.Val600Glu)'); return; }
+    if(!m){
+      const info = tokenInfo('change','Biçim tanınamadı. Ör: NM_004333.6:c.1799T>A (p.Val600Glu)');
+      out.innerHTML = `<div class="tcard"><div class="t-h">${info.t}</div><div class="t-d">${info.b}</div></div>`;
+      (isDesktop()?document.getElementById('deskPanel'):out.parentElement).scrollIntoView({behavior:'smooth',block:'nearest'});
+      return;
+    }
     const [,ref,lvl,pos,chg='',prot='']=m;
-    out.innerHTML = `
+    out.innerHTML=`
       <div class="tcard">
         <div class="t-h">Ayrıştırma</div>
         <div class="t-d">Referans: <span class="token" data-token="ref" data-val="${ref}">${ref}</span></div>
@@ -312,7 +359,7 @@ document.addEventListener('click',e=>{
         ${prot?`<div class="t-d">Protein: <span class="token" data-token="aa" data-val="${prot.replace(/^p\\./,'')}">${prot}</span></div>`:''}
       </div>
     `;
-    out.parentElement.scrollIntoView({behavior:'smooth',block:'nearest'});
+    (isDesktop()?document.getElementById('deskPanel'):out.parentElement).scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   if(e.target.id==='anClr'){ document.getElementById('anIn').innerText=''; document.getElementById('anOut').innerHTML=''; }
 });
