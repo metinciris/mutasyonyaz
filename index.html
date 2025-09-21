@@ -3,27 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>NGS Varyant Yazımı — HGVS/HGNC Öğretici</title>
+<title>NGS Varyant Yazımı — Kapsamlı Öğretici (HGVS/HGNC)</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
   --bg:#f7fafc; --panel:#ffffff; --text:#0f172a; --muted:#475569; --border:#e2e8f0;
   --chip:#f1f5f9; --info:#dbeafe; --ok:#dcfce7; --warn:#fef3c7; --primary:#1d4ed8; --primary2:#3b82f6;
+  --old:#ef4444; --new:#16a34a; --dna:#93c5fd; --rna:#86efac; --prot:#fecaca; --del:#dc2626; --ins:#16a34a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+body{background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
 a{color:var(--primary2);text-decoration:none}
 code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 
-/* header minimalist */
+/* header */
 .wrap{max-width:1200px;margin:0 auto;padding:16px;display:grid;gap:12px}
 .header{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px 16px}
 .h-title{font-weight:900;font-size:clamp(22px,4.5vw,34px);color:var(--primary)}
+.h-sub{color:var(--muted);font-size:14px;margin-top:2px}
 
-/* GRID: mobile = tek sütun; desktop = içerik + sağ panel */
+/* GRID: mobile tek sütun; desktop içerik + sağ panel */
 .main-grid{display:grid;gap:12px;grid-template-columns:1fr}
-@media(min-width:1120px){ .main-grid{grid-template-columns:1fr 340px} }
+@media(min-width:1120px){ .main-grid{grid-template-columns:1fr 370px} }
 
 /* content card */
 .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}
@@ -40,16 +42,33 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 .token:active{transform:scale(.98)}
 .example{background:var(--chip);border-left:4px solid var(--primary2);padding:12px;border-radius:10px}
 .ex-title{font-weight:800;margin-bottom:6px}
+.ex-title .token{background:var(--ok);font-weight:800}
 .code{background:var(--panel);border:1px solid var(--border);padding:10px;border-radius:10px;white-space:pre-wrap;word-break:break-word}
+
+/* colored base highlights / edit viz */
+.base-old{color:#fff;background:var(--old);padding:0 .25em;border-radius:.35em}
+.base-new{color:#fff;background:var(--new);padding:0 .25em;border-radius:.35em}
+.base-del{color:#fff;background:var(--del);text-decoration:line-through;padding:0 .22em;border-radius:.35em}
+.base-ins{color:#fff;background:var(--ins);padding:0 .22em;border-radius:.35em}
+.dup-box{display:inline-block;padding:0 .3em;border:2px dashed #64748b;border-radius:.35em;background:#fff}
+
+/* legends */
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.legend .chip{background:var(--chip);border:1px solid var(--border);padding:6px 8px;border-radius:999px;font-size:12px}
+.chip .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.sw-old{background:var(--old)} .sw-new{background:var(--new)}
+.sw-dna{background:var(--dna)} .sw-rna{background:var(--rna)} .sw-prot{background:var(--prot)}
+.sw-del{background:var(--del)} .sw-ins{background:var(--ins)}
 
 /* inline explanation slot (per section; mobile default) */
 .explain-slot{margin-top:8px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .ex-head{background:var(--chip);padding:10px 12px;font-weight:800;display:flex;align-items:center;gap:8px}
-.ex-body{padding:12px;display:grid;gap:8px}
+.ex-body{padding:12px;display:grid;gap:10px}
 .tcard{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px}
 .t-h{font-weight:900;color:var(--primary2);margin-bottom:6px}
 .t-d{font-size:15px;margin-bottom:6px}
 .t-ex{background:var(--chip);border:1px solid var(--border);padding:8px;border-radius:8px}
+.t-list{padding-left:18px}
 .actions{display:flex;gap:8px}
 .btn{background:var(--primary);color:#fff;border:none;padding:9px 12px;border-radius:10px;font-weight:800;cursor:pointer}
 .btn-sec{background:var(--chip);border:1px solid var(--border);padding:9px 12px;border-radius:10px;font-weight:700;cursor:pointer}
@@ -60,14 +79,13 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 /* RIGHT PANEL (desktop only) */
 .side-panel{display:none}
 @media(min-width:1120px){
-  .side-panel{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border);border-radius:14px;position:sticky;top:16px;height:max-content}
+  .side-panel{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border);border-radius:14px;position:sticky;top:16px;height:max-content;max-height:80vh;overflow:auto}
   .p-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-weight:900;color:var(--primary)}
   .p-body{padding:12px 14px;display:grid;gap:10px}
-  /* desktopta inline açıklamaları gizle (yan panel kullanılacak) */
-  .section .explain-slot{display:none}
+  .section .explain-slot{display:none} /* desktopta inline açıklamaları gizle */
 }
 
-/* footer (links moved to bottom) */
+/* footer */
 .footer{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
 .links{display:flex;gap:8px;flex-wrap:wrap}
 .link{background:var(--chip);border:1px solid var(--border);padding:8px 12px;border-radius:999px;font-size:13px}
@@ -77,7 +95,10 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 </head>
 <body>
 <div class="wrap">
-  <header class="header"><div class="h-title">NGS Varyant Yazımı — Öğretici</div></header>
+  <header class="header">
+    <div class="h-title">NGS Varyant Yazımı — Kapsamlı Öğretici</div>
+    <div class="h-sub">HGVS (varyant yazımı) • HGNC (gen ad/ sembol). Mobilde açıklama <b>bölüm içinde</b>, PC’de <b>sağ panelde</b>.</div>
+  </header>
 
   <div class="main-grid">
     <!-- CONTENT -->
@@ -91,10 +112,16 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
         <!-- 1 -->
         <section class="section" id="s1">
           <div class="sec-title"><span>1. Giriş</span></div>
-          <div>Standart HGVS/HGNC yazımı; raporlar ve veritabanları (ClinVar, gnomAD, COSMIC) arasında tutarlılık sağlar.</div>
+          <div>HGVS/HGNC kuralları; rapor, veri tabanı ve yayınlar arasında <b>tek dil</b> oluşturur. Aynı varyant farklı laboratuvarlarda aynı şekilde yazılınca <b>iletişim ve doğrulanabilirlik</b> artar.</div>
           <div class="example">
             <div class="ex-title">Kısa kural</div>
-            <div class="code mono">[Referans]:[Düzey].[Tanım] → <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
+            <div class="code mono">[Referans]:[Düzey].[Tanım] → <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799<span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span> ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
+            <div class="legend">
+              <span class="chip"><span class="sw sw-dna"></span>DNA</span>
+              <span class="chip"><span class="sw sw-prot"></span>Protein</span>
+              <span class="chip"><span class="sw sw-old"></span>Eski baz</span>
+              <span class="chip"><span class="sw sw-new"></span>Yeni baz</span>
+            </div>
           </div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
@@ -103,7 +130,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
         <section class="section" id="s2">
           <div class="sec-title"><span>2. Semboller</span></div>
           <div class="tokens">
-            <span class="token" data-token="gt">&gt;</span>
+            <span class="token" data-token="gt" data-val="A>G">&gt;</span>
             <span class="token" data-token="del">del</span>
             <span class="token" data-token="ins">ins</span>
             <span class="token" data-token="dup">dup</span>
@@ -114,22 +141,28 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
             <span class="token" data-token="asterisk">*</span>
             <span class="token" data-token="plus">+1</span>
             <span class="token" data-token="minus" data-val="-1">-1</span>
+            <span class="token" data-token="dcolon">::</span>
           </div>
           <div class="example">
-            <div class="ex-title">Mini örnekler</div>
-            <div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A</div>
-            <div class="code mono">c.68_69<span class="token" data-token="del">del</span>AG</div>
-            <div class="code mono">c.123_124<span class="token" data-token="ins">ins</span>T</div>
+            <div class="ex-title">Mini örnekler (tıklanabilir)</div>
+            <div class="code mono">c.1799<span class="token" data-token="pos" data-val="1799">1799</span><span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span></div>
+            <div class="code mono">c.68_69<span class="token" data-token="del" data-val="AG">del</span><span class="base-del">AG</span></div>
+            <div class="code mono">c.123_124<span class="token" data-token="ins" data-val="T">ins</span><span class="base-ins">T</span></div>
+            <div class="code mono"><span class="dup-box">c.100_102<span class="token" data-token="dup">dup</span></span></div>
+            <div class="code mono">c.400_450<span class="token" data-token="inv">inv</span></div>
             <div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div>
             <div class="code mono">c.<span class="token" data-token="asterisk" data-val="*5">*5</span>G>A</div>
+            <div class="code mono">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A</div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span></div>
           </div>
-          <div class="warn">Excel uyarısı: MARCH1 gibi genler tarih biçimine dönüşebilir (1-Mar). CSV/TSV ve metin sütun kullanın.</div>
+          <div class="warn">Excel uyarısı: <b>MARCH1</b>, <b>SEPT1</b> gibi genler tarih formatına dönüşebilir (1-Mar, 1-Sep). CSV/TSV ve <i>Text</i> sütun kullanın; otomatik biçimlendirmeyi kapatın.</div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
 
         <!-- 3 -->
         <section class="section" id="s3">
           <div class="sec-title"><span>3. Koordinatlar</span></div>
+          <div>HGVS; <b>g.</b> (genom), <b>c.</b> (kodlayan DNA), <b>n.</b> (non-kodlayan RNA) ve <b>p.</b> (protein) düzeylerinde yazımı destekler. Klinik raporda çoğunlukla <b>c.</b> ve eşleşen <b>p.</b> birlikte verilir.</div>
           <div class="tokens">
             <span class="token" data-token="levelg">g.</span>
             <span class="token" data-token="levelc">c.</span>
@@ -138,8 +171,8 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
           </div>
           <div class="example">
             <div class="ex-title">Örnekler</div>
-            <div class="code mono"><span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelg">g.</span>140453136<span class="token" data-token="gt">&gt;</span>T</div>
-            <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799T<span class="token" data-token="gt">&gt;</span>A</div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelg">g.</span>140453136<span class="token" data-token="gt" data-val="A>T"><span class="base-old">A</span>&gt;<span class="base-new">T</span></span></div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span>1799<span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span></div>
             <div class="code mono"><span class="token" data-token="ref" data-val="NP_004324.2">NP_004324.2</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div>
           </div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
@@ -148,21 +181,23 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
         <!-- 4 -->
         <section class="section" id="s4">
           <div class="sec-title"><span>4. Varyant Tipleri</span></div>
-          <div class="example"><div class="ex-title">SNV</div><div class="code mono">c.1799T<span class="token" data-token="gt">&gt;</span>A — p.<span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div></div>
-          <div class="example"><div class="ex-title">Silme</div><div class="code mono">c.1799_1801<span class="token" data-token="del">del</span></div></div>
-          <div class="example"><div class="ex-title">Ekleme</div><div class="code mono">c.1799_1800<span class="token" data-token="ins">ins</span>T</div></div>
-          <div class="example"><div class="ex-title">Çoğaltma</div><div class="code mono">c.100_102<span class="token" data-token="dup">dup</span></div></div>
-          <div class="example"><div class="ex-title">delins</div><div class="code mono">c.1799_1800<span class="token" data-token="delins">delins</span>AG</div></div>
-          <div class="example"><div class="ex-title">Frameshift</div><div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div></div>
+          <div class="example"><div class="ex-title">SNV</div><div class="code mono">c.1799<span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span> — p.<span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span></div><div>Tek baz değişimi. Missense, nonsense veya eşanlamlı olabilir.</div></div>
+          <div class="example"><div class="ex-title">Silme</div><div class="code mono">c.68_69<span class="token" data-token="del" data-val="AG">del</span><span class="base-del">AG</span></div><div>Aralıktaki bazlar kaldırılır. 3’ün katı değilse <b>frameshift</b> yapar.</div></div>
+          <div class="example"><div class="ex-title">Ekleme</div><div class="code mono">c.123_124<span class="token" data-token="ins" data-val="T">ins</span><span class="base-ins">T</span></div><div>İki pozisyon arasına yeni baz(lar) eklenir.</div></div>
+          <div class="example"><div class="ex-title">Çoğaltma</div><div class="code mono"><span class="dup-box">c.100_102<span class="token" data-token="dup">dup</span></span></div><div>Aynı dizinin kopyalanıp tekrar eklenmesi.</div></div>
+          <div class="example"><div class="ex-title">delins</div><div class="code mono">c.1799_1800<span class="token" data-token="delins">delins</span><span class="base-del">TT</span>→<span class="base-ins">AG</span></div><div>Silme ve yerine farklı dizi eklenmesi (HGVS: <b>delins</b>).</div></div>
+          <div class="example"><div class="ex-title">İnversiyon</div><div class="code mono">c.400_450<span class="token" data-token="inv">inv</span></div><div>Aralık ters çevrilir; çoğunlukla genomik düzeyde raporlanır.</div></div>
+          <div class="example"><div class="ex-title">Frameshift</div><div class="code mono">p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17</div><div>Okuma çerçevesi kayar; çoğu kez erken durdurma.</div></div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
 
         <!-- 5 -->
         <section class="section" id="s5">
           <div class="sec-title"><span>5. Splice/UTR</span></div>
-          <div class="code mono">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T (donor) · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (acceptor)</div>
+          <div>İntron kenarları kritik: <b>donor</b> (+1/+2) ve <b>acceptor</b> (−1/−2). UTR konumları: c.<b>-n</b> (ATG öncesi, 5′ UTR) ve c.<b>*n</b> (stop sonrası, 3′ UTR).</div>
+          <div class="code mono">c.92<span class="token" data-token="plus" data-val="+1">+1</span>G>T · c.92<span class="token" data-token="minus" data-val="-1">-1</span>G>A</div>
           <div class="code mono">5′ UTR: c.<span class="token" data-token="minus" data-val="-124">-124</span>C>T · 3′ UTR: c.<span class="token" data-token="asterisk" data-val="*2">*2</span>A>G</div>
-          <div class="tip">Protein etkisi belirsizse: <b>p.?</b> yazılabilir.</div>
+          <div class="tip">Protein etkisi bilinmiyorsa: <b>p.?</b> yazılabilir. RNA kanıtı (RT-PCR/RNA-seq) değerli.</div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
 
@@ -170,6 +205,7 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
         <section class="section" id="s6">
           <div class="sec-title"><span>6. Füzyon</span></div>
           <div class="code mono"><span class="token" data-token="ref" data-val="BCR">BCR</span><span class="token" data-token="dcolon">::</span><span class="token" data-token="ref" data-val="ABL1">ABL1</span> — <span class="token" data-token="fusionIso" data-val="e13a2">e13a2</span></div>
+          <div class="tip">Rapor: kırpım noktası/izoform, yöntem (RNA-seq/RT-PCR/FISH) ve tedavi ilişkilendirmesi (TKI) belirtilmeli.</div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
         </section>
 
@@ -178,11 +214,12 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
           <div class="sec-title"><span>7. Raporlama</span></div>
           <div class="example">
             <div class="ex-title">Örnek rapor parçası</div>
-            <div class="code mono">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
-            <ul style="padding-left:18px;margin-top:6px">
-              <li>Veritabanları: ClinVar, gnomAD, COSMIC</li>
-              <li>ACMG sınıfı + kanıt cümleleri</li>
-              <li>Yöntem/limitler (kapsama, VAF, hedef dışı bölgeler)</li>
+            <div class="code mono">NM_004333.6:c.1799<span class="base-old">T</span>&gt;<span class="base-new">A</span> (p.Val600Glu)</div>
+            <ul class="t-list" style="margin-top:6px">
+              <li>Referans: doğru <i>accession.version</i> + genom sürümü (GRCh37/38)</li>
+              <li>DNA + protein birlikte; gerekirse genomik koordinat</li>
+              <li>ACMG sınıfı (kanıt kodlarıyla) ve literatür</li>
+              <li>Teknik limitler: kapsama, VAF, hedef dışı bölgeler</li>
             </ul>
           </div>
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
@@ -190,29 +227,81 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 
         <!-- 8 -->
         <section class="section" id="s8">
-          <div class="sec-title"><span>8. Örnekler</span></div>
+          <div class="sec-title"><span>8. Örnekler (uzun açıklamalı)</span></div>
 
           <div class="example">
-            <div class="ex-title">BRAF V600E</div>
-            <div class="code mono">
-              <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span><span class="token" data-token="colon">:</span><span class="token" data-token="levelc">c.</span><span class="token" data-token="pos" data-val="1799">1799</span>T<span class="token" data-token="gt">&gt;</span>A ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )
-            </div>
-            <p>1799. pozisyonda T→A; protein düzeyinde Val→Glu (onkojenik).</p>
+            <div class="ex-title"><span class="token" data-token="ex_braf">BRAF V600E</span></div>
+            <div class="code mono"><span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>:<span class="token" data-token="levelc">c.</span>1799<span class="token" data-token="gt" data-val="T>A"><span class="base-old">T</span>&gt;<span class="base-new">A</span></span> ( <span class="token" data-token="levelp">p.</span><span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span> )</div>
           </div>
 
           <div class="example">
-            <div class="ex-title">Splice acceptor</div>
-            <div class="code mono">HBB NM_000518.5:<span class="token" data-token="levelc">c.</span>92<span class="token" data-token="minus" data-val="-1">-1</span>G>A (p.?)</div>
+            <div class="ex-title"><span class="token" data-token="ex_egfr_l858r">EGFR L858R</span></div>
+            <div class="code mono">EGFR <span class="token" data-token="levelc">c.</span>2573<span class="token" data-token="gt" data-val="T>G"><span class="base-old">T</span>&gt;<span class="base-new">G</span></span> ( <span class="token" data-token="levelp">p.</span>Leu858Arg )</div>
           </div>
 
           <div class="example">
-            <div class="ex-title">TERT promoter</div>
-            <div class="code mono">TERT: <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span>C>T (C228T)</div>
+            <div class="ex-title"><span class="token" data-token="ex_kras_g12d">KRAS G12D</span></div>
+            <div class="code mono">KRAS <span class="token" data-token="levelc">c.</span>35<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Gly12Asp )</div>
           </div>
 
           <div class="example">
-            <div class="ex-title">delins</div>
-            <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span>AG</div>
+            <div class="ex-title"><span class="token" data-token="ex_idh1_r132h">IDH1 R132H</span></div>
+            <div class="code mono">IDH1 <span class="token" data-token="levelc">c.</span>395<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Arg132His )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_pik3ca_e545k">PIK3CA E545K</span></div>
+            <div class="code mono">PIK3CA <span class="token" data-token="levelc">c.</span>1633<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Glu545Lys )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_tp53_r175h">TP53 R175H</span></div>
+            <div class="code mono">TP53 <span class="token" data-token="levelc">c.</span>524<span class="token" data-token="gt" data-val="G>A"><span class="base-old">G</span>&gt;<span class="base-new">A</span></span> ( p.Arg175His )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_brac1_185delag">BRCA1 185delAG</span></div>
+            <div class="code mono">BRCA1 <span class="token" data-token="levelc">c.</span>68_69<span class="token" data-token="del" data-val="AG">del</span><span class="base-del">AG</span> ( p.Glu23Val<span class="token" data-token="fs">fs</span><span class="token" data-token="ter">Ter</span>17 )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_cftr_f508del">CFTR F508del</span></div>
+            <div class="code mono">CFTR <span class="token" data-token="levelc">c.</span>1521_1523<span class="token" data-token="del" data-val="CTT">del</span><span class="base-del">CTT</span> ( p.Phe508del )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_erbb2_ins">ERBB2 exon20 insertion</span></div>
+            <div class="code mono">ERBB2 <span class="token" data-token="levelc">c.</span>2310_2311<span class="token" data-token="ins" data-val="GGT">ins</span><span class="base-ins">GGT</span> ( örn. p.Ala775_Gly776insGly )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_flt3_itd">FLT3-ITD</span></div>
+            <div class="code mono">FLT3 <span class="dup-box">ex14_15 <span class="token" data-token="dup">dup</span></span> ( Internal Tandem Duplication )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_npm1_ins">NPM1 Type A ins</span></div>
+            <div class="code mono">NPM1 <span class="token" data-token="levelc">c.</span>860_863<span class="token" data-token="ins" data-val="TCTG">ins</span><span class="base-ins">TCTG</span> ( p.Trp288CysfsTer12 )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_met_ex14">MET Exon 14 skipping</span></div>
+            <div class="code mono">MET <span class="token" data-token="levelc">c.</span>3028<span class="token" data-token="minus" data-val="-1">-1</span>G>A (splice) → Exon 14 skipping</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_hbb_hbs">HBB HbS (Sickle)</span></div>
+            <div class="code mono">HBB <span class="token" data-token="levelc">c.</span>20<span class="token" data-token="gt" data-val="A>T"><span class="base-old">A</span>&gt;<span class="base-new">T</span></span> ( p.Glu7Val )</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_tert_prom">TERT promoter</span></div>
+            <div class="code mono">TERT <span class="token" data-token="levelc">c.</span><span class="token" data-token="minus" data-val="-124">-124</span><span class="token" data-token="gt" data-val="C>T"><span class="base-old">C</span>&gt;<span class="base-new">T</span></span> (C228T)</div>
+          </div>
+
+          <div class="example">
+            <div class="ex-title"><span class="token" data-token="ex_delins_alt">delins (alternatif)</span></div>
+            <div class="code mono"><span class="token" data-token="levelc">c.</span>1799_1800<span class="token" data-token="delins">delins</span><span class="base-del">TT</span>→<span class="base-ins">AG</span> ( p.Val600_Val601delinsArgGly )</div>
           </div>
 
           <div class="explain-slot"><div class="ex-head"><i class="fa fa-circle-info"></i> Açıklama</div><div class="ex-body"></div></div>
@@ -238,8 +327,8 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
       <div class="p-body">
         <div class="tcard" id="dTokenCard">
           <div class="t-h">Bir parçaya tıkla — burada açıklayalım</div>
-          <div class="t-d">Örnek: <span class="mono">NM_004333.6:c.1799T>A</span></div>
-          <div class="t-ex">Bileşene tıkladığında örnek ve açıklama değişir.</div>
+          <div class="t-d">Örnek: <span class="mono">c.1799<span class="base-old">T</span>&gt;<span class="base-new">A</span> · del<span class="base-del">AG</span> · ins<span class="base-ins">TCTG</span></span></div>
+          <div class="t-ex">Bileşene tıklayınca örnek ve açıklama ayrıntılı olarak güncellenir.</div>
         </div>
       </div>
     </aside>
@@ -260,31 +349,168 @@ code,pre,.mono{font-family:"Fira Code","Roboto Mono",ui-monospace,monospace}
 </div>
 
 <script>
-/* ==== Token açıklamaları ==== */
+/* ---------- Yardımcı renklendirme/şablonlar ---------- */
+function colorSwapString(val){
+  const m = (val||'').match(/^([ACGT\*])>([ACGT\*])$/i);
+  if(!m) return val||'A>G';
+  return `<span class="base-old">${m[1]}</span>&gt;<span class="base-new">${m[2]}</span>`;
+}
+function colorDel(val){ return `<span class="base-del">${val||''}</span>`; }
+function colorIns(val){ return `<span class="base-ins">${val||''}</span>`; }
+
+/* ---------- Açıklama içeriği ---------- */
 function tokenInfo(kind,val){
+  const swap = val && />/.test(val) ? colorSwapString(val) : 'A&gt;G';
   const d={
-    ref:{t:'Referans (accession.version)',b:'RefSeq/Ensembl erişimi ve versiyonu (örn. NM_004333.6). Versiyon yazılmalı.',e:`<mark>${val||'NM_XXXXXX.X'}</mark>:c.123A>G`},
-    colon:{t:': — Ayraç',b:'Referans ile varyant tanımını ayırır.',e:'NM_004333.6<mark>:c.1799T>A</mark>'},
-    levelc:{t:'c. — Kodlayan DNA',b:'Transkript CDS koordinatı (ATG +1). Klinik raporlarda standart.',e:'NM_004333.6:<mark>c.</mark>1799T>A'},
-    levelg:{t:'g. — Genomik DNA',b:'Kromozom/genom referansına göre koordinatlar (intronlar dahil).',e:'NC_000007.14:<mark>g.</mark>140453136A>T'},
-    leveln:{t:'n. — Non-kodlayan RNA',b:'ncRNA transkript koordinatları.',e:'NR_002196.2:<mark>n.</mark>215A>G'},
-    levelp:{t:'p. — Protein',b:'Üç harfli AA kodu önerilir (örn. p.Val600Glu).',e:'NP_004324.2:<mark>p.</mark>Val600Glu'},
-    pos:{t:'Pozisyon / Aralık',b:'Tek baz (n) veya aralık (n_m).',e:`c.<mark>${val||'123'}</mark>`},
-    gt:{t:'> — Yer değiştirme',b:'Tek baz değişimi: Ref > Alt.',e:'c.1799T<mark>></mark>A'},
-    del:{t:'del — Silme',b:'Bir/birkaç bazın kaldırılması.',e:'c.68_69<mark>del</mark>AG'},
-    ins:{t:'ins — Ekleme',b:'Araya yeni baz(lar) eklenmesi.',e:'c.123_124<mark>ins</mark>T'},
-    dup:{t:'dup — Çoğaltma',b:'Aynı dizinin tekrar eklenmesi.',e:'c.100_102<mark>dup</mark>'},
-    delins:{t:'delins — Sil+Ekle',b:'Silinen aralığın yerine farklı dizi eklenir (indel yerine “delins”).',e:'c.1799_1800<mark>delins</mark>AG'},
-    inv:{t:'inv — İnversiyon',b:'Bir aralığın ters çevrilmesi.',e:'c.400_450<mark>inv</mark>'},
-    fs:{t:'fs — Frameshift',b:'Protein düzeyinde okuma çerçevesi kayması.',e:'p.Glu23Val<mark>fs</mark>Ter17'},
-    ter:{t:'Ter — Stop',b:'Protein düzeyinde durdurma için Ter önerilir.',e:'p.Gln22<mark>Ter</mark>'},
-    asterisk:{t:"* — 3' UTR",b:"Stop sonrası UTR konumları (c.*n).",e:'c.<mark>*2</mark>A>G'},
-    plus:{t:'+ — Ekzon sonrası intron',b:'+1 donor pozisyonu (kritik splice).',e:'c.92<mark>+1</mark>G>T'},
-    minus:{t:"- — Ekzon öncesi intron / 5' UTR",b:"c.92-1 acceptor; c.-124 ATG öncesi 5' UTR.",e:'c.92<mark>-1</mark>G>A · c.<mark>-124</mark>C>T'},
-    dcolon:{t:':: — Füzyon ayırıcı',b:'GENE1::GENE2 kısaltması; izoform (e13a2/e14a2) raporda belirtilmeli.',e:'BCR<mark>::</mark>ABL1'},
-    fusionIso:{t:'Füzyon izoformu',b:'e13a2, e14a2 vb. RNA kırpım noktaları.',e:'BCR::ABL1 <mark>e13a2</mark>'},
-    aa:{t:'Amino asit değişimi',b:'Üç harfli AA ile; örn. Val→Glu = Val600Glu.',e:`p.<mark>${val||'Val600Glu'}</mark>`},
-    change:{t:'Değişim tanımı',b:'A>G, del, ins, dup, delins, inv vb.',e:`c.123<mark>${val||'A>G'}</mark>`},
+
+    /* seviyeler, referans, ayraç */
+    ref:{t:'Referans (accession.version)',
+      b:'Hangi sekansa göre yazdığınızı kesinleştirir (RefSeq/Ensembl accession + versiyon). Farklı versiyonlar farklı koordinatlara yol açabilir. Klinik raporda mutlaka versiyon verin.',
+      e:`<mark>${val||'NM_XXXXXX.X'}</mark>:c.123A>G`},
+    colon:{t:': — Ayraç',
+      b:'Referans ile varyant tanımını ayırır. Solda referans; sağda c./g./n./p. ile başlayan ifade.',
+      e:'NM_004333.6<mark>:c.1799T>A</mark>'},
+    levelc:{t:'c. — Kodlayan DNA',
+      b:'ATG +1 kabul edilerek CDS koordinatları yazılır. 5′ UTR için negatif (c.-n), 3′ UTR için yıldızlı (c.*n) indis kullanılır. Klinik raporda en yaygın düzey.',
+      e:'NM_004333.6:<mark>c.</mark>1799T>A'},
+    levelg:{t:'g. — Genomik DNA',
+      b:'Kromozom/tüm genom referansına göre yazılır (intronlar dâhil). Büyük yapısal değişiklikler için kullanışlı.',
+      e:'NC_000007.14:<mark>g.</mark>140453136A>T'},
+    leveln:{t:'n. — Non-kodlayan RNA',
+      b:'ncRNA transkript koordinatları. Protein kodlamayan genlerde raporlama için.',
+      e:'NR_002196.2:<mark>n.</mark>215A>G'},
+    levelp:{t:'p. — Protein',
+      b:'Amino asit düzeyi. Üç harfli kod (Val, Glu) önerilir. p.(=) eşanlamlı; p.? belirsiz etki.',
+      e:'NP_004324.2:<mark>p.</mark>Val600Glu'},
+    pos:{t:'Pozisyon / Aralık',
+      b:'Tek baz (n) veya aralık (n_m). Aralıklar dâhildir: hem başlangıç hem bitiş pozisyonu değişime dahildir.',
+      e:`c.<mark>${val||'1799'}</mark>`},
+
+    /* mutasyon tipleri (renkli gösterim) */
+    gt:{t:'> — Yer değiştirme (Substitution)',
+      b:`Tek nükleotidin başka bir nükleotid ile değiştiğini belirtir. Basitçe “eski baz yerine yeni baz geldi”. Örn: ${colorSwapString('T>A')}. Etki: missense / nonsense / eşanlamlı olabilir.`,
+      e:`c.1799${swap}`},
+    del:{t:'del — Silme (Deletion)',
+      b:'Bir/birkaç bazın kaldırılması. Uzunluk 3’ün katı değilse çerçeve kayması oluşabilir ve erken durdurma kodonu görülebilir.',
+      e:`c.68_69<mark>del</mark>${colorDel(val||'AG')}`},
+    ins:{t:'ins — Ekleme (Insertion)',
+      b:'İki pozisyon arasına yeni baz(lar) eklenmesi. Okuma çerçevesi etkilenebilir (kadans dışı ekleme frameshift yapar).',
+      e:`c.123_124<mark>ins</mark>${colorIns(val||'T')}`},
+    dup:{t:'dup — Çoğaltma (Duplication)',
+      b:'Yan yana tekrar eden dizinin bir kez daha eklenmesi. Kısa tekrar bölgelerinde sık görülür.',
+      e:'c.100_102<mark>dup</mark>'},
+    delins:{t:'delins — Sil + farklı ekleme',
+      b:'Silinen aralığın yerine farklı bir dizinin eklenmesi. HGVS “indel” yerine <b>delins</b> yazılmasını önerir.',
+      e:`c.1799_1800<mark>delins</mark>${colorDel('TT')}→${colorIns('AG')}`},
+    inv:{t:'inv — İnversiyon',
+      b:'Bir aralığın yönünün ters çevrilmesi. Daha çok genomik (g.) düzeyde raporlanır; kırpım noktaları da etkilenebilir.',
+      e:'c.400_450<mark>inv</mark>'},
+    fs:{t:'fs — Frameshift',
+      b:'Okuma çerçevesi değişir; genellikle erken durdurma kodonu oluşur. Protein yazımında “fs” ve ardından “TerX” sıklıkla görülür.',
+      e:'p.Glu23Val<mark>fs</mark>Ter17'},
+    ter:{t:'Ter — Durdurma (Stop)',
+      b:'Protein düzeyinde durdurma kodonu. p.Arg97Ter gibi.',
+      e:'p.Gln22<mark>Ter</mark>'},
+    asterisk:{t:"* — 3′ UTR konumu",
+      b:"Stop kodonundan sonraki UTR için c.*n kullanılır (örn. c.*2A>G).",
+      e:'c.<mark>*2</mark>A>G'},
+    plus:{t:'+ — Ekzon sonrası intron (donor)',
+      b:'+1/+2 çekirdek donor motifidir; bu bölgelerdeki değişimler çoğunlukla güçlü splice etkisi taşır.',
+      e:'c.92<mark>+1</mark>G>T'},
+    minus:{t:"- — Ekzon öncesi intron / 5′ UTR",
+      b:"c.92-1 acceptor çekirdeği; c.-n ise ATG öncesi 5′ UTR konumudur.",
+      e:'c.92<mark>-1</mark>G>A · c.<mark>-124</mark>C>T'},
+    dcolon:{t:':: — Füzyon ayırıcı',
+      b:'GENE1::GENE2 yazımı, transkript düzeyinde birleşmiş iki geni gösterir. İzoform (e13a2 vb.) ve yöntem raporda yer almalı.',
+      e:'BCR<mark>::</mark>ABL1'},
+    fusionIso:{t:'Füzyon izoformu',
+      b:'e13a2/e14a2 gibi notasyonlar, ekzon-ekzon birleşimlerini tanımlar (örn. BCR ekzon 13 → ABL1 ekzon 2).',
+      e:'BCR::ABL1 <mark>e13a2</mark>'},
+    aa:{t:'Amino asit değişimi',
+      b:'Üç harfli AA kodu ile yazılır. p.(=) eşanlamlı, p.? belirsiz etki demektir.',
+      e:`p.<mark>${(val||'Val600Glu').replace(/^p\./,'')}</mark>`},
+    change:{t:'Değişim tanımı',
+      b:'A>G, del, ins, dup, delins, inv vb. HGVS kurallarına uygun yazılmalıdır.',
+      e:`c.123<mark>${val||'A>G'}</mark>`},
+
+    /* ---- Uzun örnek açıklamaları ---- */
+    ex_braf:{t:'BRAF V600E — Ayrıntılı okuma',
+      b:`DNA: c.1799${colorSwapString('T>A')} → Kodon GTG(Val) → GAG(Glu).
+      Protein: p.Val600Glu — aktivasyon döngüsündeki 600. kalıntı değişir; BRAF kinaz aktivitesi artar, MAPK/ERK yolu konstitutif aktive olur.
+      Klinik: Melanom, PTC, KRK vb. onkojenik sürücü; BRAF ± MEK inhibitörleri ile hedeflenebilir.
+      Rapor: accession.version, genom sürümü, eşleşen p. ifadesi, VAF/kapsam bilgisi.`,
+      e:`NM_004333.6:c.1799${colorSwapString('T>A')} (p.Val600Glu)`},
+
+    ex_egfr_l858r:{t:'EGFR L858R — TKİ duyarlı',
+      b:`DNA: c.2573${colorSwapString('T>G')} → CTG(Leu) → CGG(Arg).
+      Klinik: Akciğer adenokarsinomunda TKİ (erlotinib, gefitinib, afatinib, osimertinib) duyarlılığı ile ilişkili.
+      Not: Raporlarda eşlik eden exon19 delesyon/ins varyantları ile ayırıcı yazım önemlidir.`,
+      e:`EGFR:c.2573${colorSwapString('T>G')} (p.Leu858Arg)`},
+
+    ex_kras_g12d:{t:'KRAS G12D — MAPK aktivasyonu',
+      b:`DNA: c.35${colorSwapString('G>A')} → GGT(Gly) → GAT(Asp).
+      Klinik: Kolorektal ve pankreas kanserlerinde sık; anti-EGFR tedavilerine direnç ile ilişkilidir.`,
+      e:`KRAS:c.35${colorSwapString('G>A')} (p.Gly12Asp)`},
+
+    ex_idh1_r132h:{t:'IDH1 R132H — Onkometabolit (2-HG)',
+      b:`DNA: c.395${colorSwapString('G>A')} → CGT(Arg) → CAT(His).
+      Klinik: Diffüz gliomlarda tipik; tanısal/prognostik değer taşır; inhibitörler mevcuttur.`,
+      e:`IDH1:c.395${colorSwapString('G>A')} (p.Arg132His)`},
+
+    ex_pik3ca_e545k:{t:'PIK3CA E545K — PI3K aktivasyonu',
+      b:`DNA: c.1633${colorSwapString('G>A')} → GAA(Glu) → AAA(Lys).
+      Klinik: Meme, kolorektal vb.; PI3K/AKT/mTOR yolunda aktivasyon; belirli tedavilere adaylık yaratabilir.`,
+      e:`PIK3CA:c.1633${colorSwapString('G>A')} (p.Glu545Lys)`},
+
+    ex_tp53_r175h:{t:'TP53 R175H — Tümör baskılayıcı kaybı',
+      b:`DNA: c.524${colorSwapString('G>A')} → CGC(Arg) → CAC(His).
+      Klinik: Yüksek onkogenik risk; yaygın tümörlerde görülen sürücü mutasyonlardan biri.`,
+      e:`TP53:c.524${colorSwapString('G>A')} (p.Arg175His)`},
+
+    ex_brac1_185delag:{t:'BRCA1 185delAG (c.68_69delAG)',
+      b:`DNA: c.68_69del${colorDel('AG')} → okuma çerçevesi kayar → erken durdurma.
+      Klinik: Kalıtsal meme-yumurtalık kanseri sendromu; yüksek penetranslı patojenik varyant.`,
+      e:`BRCA1:c.68_69del${colorDel('AG')} (p.Glu23ValfsTer17)`},
+
+    ex_cftr_f508del:{t:'CFTR p.Phe508del (c.1521_1523delCTT)',
+      b:`DNA: c.1521_1523del${colorDel('CTT')} → kodon kaybı.
+      Protein: p.Phe508del — katlanma/trafficking bozukluğu; kistik fibrozis ana varyantı.`,
+      e:`CFTR:c.1521_1523del${colorDel('CTT')} (p.Phe508del)`},
+
+    ex_erbb2_ins:{t:'ERBB2 Exon 20 – İnsersiyon',
+      b:`DNA: exon20 çevresinde insersiyon (ör. c.2310_2311ins${colorIns('GGT')}).
+      Klinik: Akciğer adeno. alt grubu; belirli HER2 hedefli ajanlar için adaylık sağlayabilir.`,
+      e:`ERBB2:c.2310_2311ins${colorIns('GGT')} (p.Ala775_Gly776insGly)`},
+
+    ex_flt3_itd:{t:'FLT3-ITD — Dahili tandem duplikasyon',
+      b:`Genellikle juxtamembran bölgesinde tekrar (dup) oluşur; tirozin kinaz aktivitesi artar.
+      Klinik: AML’de kötü prognostik; hedefli tedaviler mevcuttur.`,
+      e:`FLT3:ex14_15 <span class="dup-box">dup</span>`},
+
+    ex_npm1_ins:{t:'NPM1 Tip A ins (c.860_863insTCTG)',
+      b:`DNA: c.860_863ins${colorIns('TCTG')} → frameshift.
+      Klinik: AML’de sık; özgün ekspresyon paterni; tanısal değeri yüksektir.`,
+      e:`NPM1:c.860_863ins${colorIns('TCTG')} (p.Trp288CysfsTer12)`},
+
+    ex_met_ex14:{t:'MET exon 14 skipping — Splice kaybı',
+      b:`Çoğunlukla acceptor/donor çekirdeği değişimi (örn. c.3028-1G>A) sonucu ekzon 14 atlanır.
+      Klinik: Akciğer kanserinde MET inhibitörlerine duyarlılık ile ilişkilidir.`,
+      e:`MET:c.3028-1${colorSwapString('G>A')} → Exon 14 skipping`},
+
+    ex_hbb_hbs:{t:'HBB HbS (p.Glu7Val)',
+      b:`DNA: c.20${colorSwapString('A>T')} → GAG(Glu) → GTG(Val).
+      Klinik: Orak hücreli anemi; hemoglobin polimerizasyonu, hemoliz ve vaso-oklüzif krizlerle seyreder.`,
+      e:`HBB:c.20${colorSwapString('A>T')} (p.Glu7Val)`},
+
+    ex_tert_prom:{t:'TERT promoter c.-124C>T (C228T)',
+      b:`ATG öncesi promotör/5′ UTR bölgesi; ETS TF bağlanmasını artırabilir → TERT ekspresyonu artar.
+      Klinik: Melanom, gliom ve tiroid kanseri dahil birçok tümörde görülür.`,
+      e:`TERT:c.-124${colorSwapString('C>T')} (C228T)`},
+
+    ex_delins_alt:{t:'delins — Amino asit düzeyi etkisi',
+      b:`c.1799_1800delinsAG gibi bir değişim, protein düzeyinde karşılık gelen aralıkta delins (örn. p.Val600_Val601delinsArgGly) olarak yazılabilir.
+      Etki çerçeveye ve konuma bağlıdır.`,
+      e:`c.1799_1800delins${colorIns('AG')} → p.Val600_Val601delinsArgGly`},
   };
   return d[kind]||{t:'Açıklama',b:val||'—',e:''};
 }
@@ -322,7 +548,7 @@ function setInlineExplain(slot,kind,val){
   slot.parentElement.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* tıklama yönlendirme: desktop→sağ panel, mobile→inline */
+/* tıklama: desktop→sağ panel, mobile→inline */
 document.addEventListener('click',e=>{
   const t=e.target.closest('.token'); if(!t) return;
   const kind=t.dataset.token||'ref';
@@ -335,28 +561,32 @@ document.addEventListener('click',e=>{
   }
 });
 
-/* hızlı analizör */
+/* Hızlı analizör: temel ayrıştırıcı (basit) */
 document.addEventListener('click',e=>{
   if(e.target.id==='anBtn'){
     const raw=document.getElementById('anIn').innerText.trim();
     const out=document.getElementById('anOut');
-    const re=/^([^:]+):(c|g|n|p)\.\s*([^\s(]+)\s*([A-Za-z*>_]+(?:>[A-Za-z*])?|delins[A-Za-z]+|del|ins[A-Za-z]*|dup|inv)?(?:\s*\(\s*(p\.[^)]+)\s*\))?$/i;
+    const re=/^([^:]+):(c|g|n|p)\.\s*([^\s(]+)\s*([A-Za-z*>_]+(?:>[A-Za-z*])?|delins[A-Za-z]+|del[A-Za-z]*|ins[A-Za-z]*|dup|inv)?(?:\s*\(\s*(p\.[^)]+)\s*\))?$/i;
     const m=raw.match(re);
     if(!m){
-      const info = tokenInfo('change','Biçim tanınamadı. Ör: NM_004333.6:c.1799T>A (p.Val600Glu)');
-      out.innerHTML = `<div class="tcard"><div class="t-h">${info.t}</div><div class="t-d">${info.b}</div></div>`;
+      out.innerHTML = `<div class="tcard"><div class="t-h">Biçim tanınamadı</div><div class="t-d">Örnek: NM_004333.6:c.1799T>A (p.Val600Glu)</div></div>`;
       (isDesktop()?document.getElementById('deskPanel'):out.parentElement).scrollIntoView({behavior:'smooth',block:'nearest'});
       return;
     }
     const [,ref,lvl,pos,chg='',prot='']=m;
+    const chgHtml = chg && chg.includes('>') ? colorSwapString(chg) :
+                    (chg.startsWith('del')? `del ${colorDel(chg.replace(/^del/,''))}`:
+                     chg.startsWith('ins')? `ins ${colorIns(chg.replace(/^ins/,''))}`:
+                     chg);
     out.innerHTML=`
       <div class="tcard">
         <div class="t-h">Ayrıştırma</div>
-        <div class="t-d">Referans: <span class="token" data-token="ref" data-val="${ref}">${ref}</span></div>
-        <div class="t-d">Düzey: <span class="token" data-token="level${lvl}">${lvl}.</span></div>
-        <div class="t-d">Pozisyon: <span class="token" data-token="pos" data-val="${pos}">${pos}</span></div>
-        ${chg?`<div class="t-d">Değişim: <span class="token" data-token="${chg.includes('>')?'gt':(chg.startsWith('del')?'del':chg.startsWith('ins')?'ins':chg.startsWith('dup')?'dup':chg.startsWith('inv')?'inv':'change')}" data-val="${chg}">${chg}</span></div>`:''}
+        <div class="t-d">Referans: <span class="token" data-token="ref" data-val="${ref}">${ref}</span> — doğru <i>accession.version</i> kullanın.</div>
+        <div class="t-d">Düzey: <span class="token" data-token="level${lvl}">${lvl}.</span> — g./c./n./p. anlam farklarına dikkat.</div>
+        <div class="t-d">Pozisyon: <span class="token" data-token="pos" data-val="${pos}">${pos}</span> — aralıklar dahil (n_m).</div>
+        ${chg?`<div class="t-d">Değişim: <span class="token" data-token="${chg.includes('>')?'gt':(chg.startsWith('del')?'del':chg.startsWith('ins')?'ins':chg.startsWith('dup')?'dup':chg.startsWith('inv')?'inv':'change')}" data-val="${chg}">${chgHtml}</span></div>`:''}
         ${prot?`<div class="t-d">Protein: <span class="token" data-token="aa" data-val="${prot.replace(/^p\\./,'')}">${prot}</span></div>`:''}
+        <div class="t-ex">İpucu: DNA + protein ifadelerini birlikte verin; genom sürümü ve VAF/kapsam ekleyin.</div>
       </div>
     `;
     (isDesktop()?document.getElementById('deskPanel'):out.parentElement).scrollIntoView({behavior:'smooth',block:'nearest'});
