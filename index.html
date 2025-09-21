@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NGS Mutasyon Varyantları — Kapsamlı Öğrenme Rehberi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --chip: #f1f5f9;
+      --highlight: #e0f2fe;
+      --danger: #fee2e2;
+      --info: #dbeafe;
+      --ok: #dcfce7;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary: #6366f1;
+      --accent: #8b5cf6;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      margin-bottom: 20px;
+      padding: 15px 20px;
+      background: var(--panel);
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .title {
+      font-weight: 800;
+      font-size: clamp(24px, 4vw, 38px);
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--muted);
+      font-size: 16px;
+    }
+    
+    .guidelines {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .guideline-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--chip);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--primary-dark);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .guideline-link:hover {
+      background: var(--info);
+    }
+    
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .card {
+      background: var(--panel);
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    /* PROGRESS SIDEBAR */
+    .progress {
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+      height: calc(100vh - 40px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .progress-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--chip);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .step:hover {
+      transform: translateX(5px);
+    }
+    
+    .step.active {
+      border-color: var(--primary);
+      background: var(--info);
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    }
+    
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .step.active .step-number {
+      background: var(--primary-dark);
+    }
+    
+    .step-text {
+      flex: 1;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    
+    .step-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn:disabled {
+      background: var(--chip);
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+    
+    /* MAIN CONTENT */
+    .content-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .content-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    .content-subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      margin-top: 5px;
+    }
+    
+    .content-body {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+      .content-body {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .explanation {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .section {
+      margin-bottom: 15px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section-content {
+      line-height: 1.7;
+    }
+    
+    .section-content p {
+      margin-bottom: 12px;
+    }
+    
+    .example {
+      background: var(--chip);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 15px 0;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .example-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+    }
+    
+    .code {
+      font-family: 'Fira Code', 'Roboto Mono', monospace;
+      background: var(--panel);
+      padding: 12px 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 10px 0;
+      border: 1px solid var(--border);
+    }
+    
+    .tokens {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .token {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 12px;
+      background: var(--info);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .token:hover {
+      background: var(--highlight);
+      transform: translateY(-2px);
+    }
+    
+    .token-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+    
+    .color-dna { background: #BFDBFE; }
+    .color-rna { background: #BBF7D0; }
+    .color-protein { background: #FECACA; }
+    .color-mutation { background: #FDE68A; }
+    
+    /* TOKEN PANEL */
+    .token-panel {
+      position: sticky;
+      top: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      background: var(--panel);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .token-panel-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .token-card {
+      padding: 16px;
+      background: var(--chip);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    
+    .token-name {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--primary-dark);
+    }
+    
+    .token-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    
+    .token-example {
+      background: var(--panel);
+      padding: 10px;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    
+    .footer {
+      padding: 15px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      background: var(--chip);
+      border-radius: 20px;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+    
+    .interactive-demo {
+      background: var(--chip);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    
+    .demo-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--primary-dark);
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .input-field {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+    }
+    
+    .analyze-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .result-box {
+      background: var(--panel);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-family: 'Fira Code', monospace;
+      min-height: 100px;
+    }
+    
+    .tip-box {
+      background: var(--ok);
+      border-left: 4px solid #10b981;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    .tip-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #065f46;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">NGS Mutasyon Varyantları — Kapsamlı Öğrenme Rehberi</div>
+      <div class="subtitle">HGVS/HGNC kuralları ile Next Generation Sequencing verilerini anlama ve yorumlama</div>
+      
+      <div class="guidelines">
+        <a href="https://hgvs-nomenclature.org/stable/recommendations/general/" target="_blank" class="guideline-link">
+          <i class="fas fa-external-link-alt"></i> HGVS Genel Öneriler
+        </a>
+        <a href="https://www.genenames.org/about/guidelines/" target="_blank" class="guideline-link">
+          <i class="fas fa-external-link-alt"></i> HGNC Kılavuzları
+        </a>
+        <a href="https://varnomen.hgvs.org/" target="_blank" class="guideline-link">
+          <i class="fas fa-external-link-alt"></i> HGVS Varyant İsimlendirme
+        </a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- PROGRESS SIDEBAR -->
+      <aside class="card progress" id="progress">
+        <div class="progress-title">
+          <i class="fas fa-road"></i> Öğrenme Yolculuğu
+        </div>
+        
+        <div class="step active" data-step="introduction">
+          <div class="step-number">1</div>
+          <div class="step-text">
+            <div class="step-title">Giriş ve Temel Kavramlar</div>
+            <div class="step-desc">NGS ve varyant terminolojisi</div>
+          </div>
+        </div>
+        
+        <div class="step" data-step="syntax">
+          <div class="step-number">2</div>
+          <div class="step-text">
+            <div class="step-title">HGVS Yazım Kuralları</div>
+            <div class="step-desc">Semboller ve yapı taşları</div>
+          </div>
+        </div>
+        
+        <div class="step" data-step="coordinates">
+          <div class="step-number">3</div>
+          <div class="step-text">
+            <div class="step-title">Koordinat Sistemleri</div>
+            <div class="step-desc">c., g., n., p. seviyeleri</div>
+          </div>
+        </div>
+        
+        <div class="step" data-step="variants">
+          <div class="step-number">4</div>
+          <div class="step-text">
+            <div class="step-title">Varyant Tipleri ve Anlamları</div>
+            <div class="step-desc">SNV, indel, delins, dup</div>
+          </div>
+        </div>
+        
+        <div class="step" data-step="interpretation">
+          <div class="step-number">5</div>
+          <div class="step-text">
+            <div class="step-title">Klinik Yorumlama</div>
+            <div class="step-desc">Varyant etkisi ve raporlama</div>
+          </div>
+        </div>
+        
+        <div class="nav">
+          <button class="btn" id="prev">
+            <i class="fas fa-arrow-left"></i> Geri
+          </button>
+          <button class="btn" id="next">
+            İleri <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <section class="card">
+        <div class="content-header">
+          <div>
+            <div class="content-title" id="title">Giriş ve Temel Kavramlar</div>
+            <div class="content-subtitle" id="subtitle">NGS ve varyant terminolojisine giriş</div>
+          </div>
+          <div class="badge">
+            <i class="fas fa-clock"></i> 5 dk okuma
+          </div>
+        </div>
+        
+        <div class="content-body">
+          <div class="explanation" id="main">
+            <!-- Content will be dynamically loaded here -->
+          </div>
+          
+          <div class="token-panel">
+            <div class="token-panel-title">
+              <i class="fas fa-info-circle"></i> Detaylı Açıklama
+            </div>
+            <div id="tokenCard" class="token-card">
+              <div class="token-name">Hoş Geldiniz</div>
+              <div class="token-desc">
+                NGS mutasyon varyantları öğrenme uygulamasına hoş geldiniz. 
+                Bir token seçerek veya içerikteki öğelere tıklayarak detaylı açıklamaları görüntüleyebilirsiniz.
+              </div>
+              <div class="token-legend">
+                <div class="legend-item">
+                  <div class="legend-color color-dna"></div>
+                  <span>DNA seviyesi</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color color-rna"></div>
+                  <span>RNA seviyesi</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color color-protein"></div>
+                  <span>Protein seviyesi</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color color-mutation"></div>
+                  <span>Mutasyon tipi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer">
+          <div>
+            <i class="fas fa-exclamation-triangle"></i> Eğitim amaçlıdır; klinik yorum için yerel kılavuzlar ve doğrulama testleri gereklidir.
+          </div>
+          <div>© HGVS/HGNC referanslı içerik</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Token explanation database
+    function tokenExplain(kind, val) {
+      const explanations = {
+        // Basic symbols
+        colon: {
+          t: ': — Referans ve Varyant Ayırıcı',
+          b: `Referans sekans tanımlayıcısı ile varyant tanımını ayırır. Örneğin, NM_004333.6:c.1799T>A ifadesindeki ":" işareti, referansı (NM_004333.6) varyant tanımından (c.1799T>A) ayırır.`,
+          example: `NM_004333.6<mark>:c.1799T>A</mark>`
+        },
+        dcolon: {
+          t: ':: — Füzyon Ayırıcı',
+          b: `İki genin veya transkriptin füzyonunu gösterir. Genellikle kanser genetiğinde kullanılır.`,
+          example: `BCR<mark>::ABL1</mark>`
+        },
+        
+        // Coordinate levels
+        levelc: {
+          t: 'c. — Kodlayan DNA Koordinatları',
+          b: `Kodlayan DNA (coding DNA) sekansı üzerindeki pozisyonu belirtir. cDNA pozisyonlarını ifade eder ve genellikle en yaygın kullanılan koordinat sistemidir. AUG start kodonu +1 pozisyonundan başlar.`,
+          example: `NM_004333.6:<mark>c.</mark>1799T>A`
+        },
+        levelg: {
+          t: 'g. — Genomik DNA Koordinatları',
+          b: `Genomik DNA üzerindeki pozisyonu belirtir. Tüm genom dizisi referans alınır. İntronlar dahil tün bölgeleri kapsar.`,
+          example: `NC_000007.14:<mark>g.</mark>140753336A>T`
+        },
+        leveln: {
+          t: 'n. — Non-kodlayan RNA Koordinatları',
+          b: `Non-kodlayan RNA transkriptleri üzerindeki pozisyonu belirtir.`,
+          example: `NR_002196.2:<mark>n.</mark>215A>G`
+        },
+        levelp: {
+          t: 'p. — Protein Koordinatları',
+          b: `Protein sekansı üzerindeki değişikliği belirtir. Amino asit değişimlerini tanımlamak için kullanılır.`,
+          example: `NP_004324.2:<mark>p.</mark>Val600Glu`
+        },
+        
+        // Mutation types
+        del: {
+          t: 'del — Silme (Deletion)',
+          b: `Bir veya daha fazla nükleotidin silindiğini gösterir.`,
+          example: `NM_004333.6:c.1799_1800<mark>del</mark>`
+        },
+        ins: {
+          t: 'ins — Ekleme (Insertion)',
+          b: `Bir veya daha fazla nükleotidin eklendiğini gösterir.`,
+          example: `NM_004333.6:c.1799_1800<mark>ins</mark>T`
+        },
+        dup: {
+          t: 'dup — Çoğaltma (Duplication)',
+          b: `Bir dizinin kopyalandığını ve eklendiğini gösterir.`,
+          example: `NM_004333.6:c.1799_1800<mark>dup</mark>`
+        },
+        delins: {
+          t: 'delins — Silme ve Ekleme',
+          b: `Bir dizinin silinip yerine başka bir dizinin eklendiğini gösterir.`,
+          example: `NM_004333.6:c.1799_1800<mark>delins</mark>AG`
+        },
+        inv: {
+          t: 'inv — inversiyon',
+          b: `Bir dizinin ters yönde yerleştirildiğini gösterir.`,
+          example: `NM_004333.6:c.1799_1800<mark>inv</mark>`
+        },
+        
+        // Position indicators
+        plus: {
+          t: '+ — Downstream/İleri Pozisyon',
+          b: `Ekzonun hemen sonrasındaki intronik veya 3' UTR bölgesindeki pozisyonu belirtir.`,
+          example: `NM_004333.6:c.1799<mark>+</mark>2T>A`
+        },
+        minus: {
+          t: '- — Upstream/Geri Pozisyon',
+          b: `Ekzonun hemen öncesindeki intronik veya 5' UTR bölgesindeki pozisyonu belirtir.`,
+          example: `NM_004333.6:c.1799<mark>-</mark>2T>A`
+        },
+        asterisk: {
+          t: '* — UTR/Durdurma Kodonu',
+          b: `Durdurma kodonunu veya UTR bölgesini belirtir.`,
+          example: `NM_004333.6:c.*<mark>2</mark>T>A`
+        },
+        
+        // Other symbols
+        gt: {
+          t: '> — Yer Değiştirme (Substitution)',
+          b: `Bir nükleotidin başka bir nükleotid ile değiştirildiğini gösterir.`,
+          example: `NM_004333.6:c.1799T<mark>></mark>A`
+        },
+        fs: {
+          t: 'fs — Çerçeve Kayması (Frameshift)',
+          b: `Okuma çerçevesinin değiştiğini gösterir.`,
+          example: `NP_004324.2:p.Val600<mark>fs</mark>`
+        },
+        ter: {
+          t: 'ter — Durdurma Kodonu (Termination)',
+          b: `Durdurma kodonunu belirtir.`,
+          example: `NP_004324.2:p.Val600<mark>ter</mark>`
+        },
+        
+        // References
+        ref: {
+          t: 'Referans Sekans Tanımlayıcısı',
+          b: `NCBI RefSeq veya Ensembl gibi veritabanlarından alınan referans sekansın kimliğidir. NM_ ve NP_ önekleri sırasıyla mRNA ve protein referanslarını gösterir.`,
+          example: `<mark>NM_004333.6</mark>:c.1799T>A`
+        },
+        pos: {
+          t: 'Pozisyon Numarası',
+          b: `Varyantın referans sekans üzerindeki konumunu belirtir. Tek bir nükleotid veya bir nükleotid aralığı şeklinde ifade edilebilir.`,
+          example: `NM_004333.6:c.<mark>1799</mark>T>A`
+        },
+        change: {
+          t: 'Değişim Tanımı',
+          b: `Varyantın doğasını açıklar. Referans alel > alternatif alel formatında veya diğer varyant tipleri için uygun notasyonla ifade edilir.`,
+          example: `NM_004333.6:c.1799<mark>T>A</mark>`
+        },
+        aa: {
+          t: 'Amino Asit Değişimi',
+          b: `Protein seviyesindeki amino asit değişimini belirtir. Referans amino asit, pozisyon numarası ve alternatif amino asit formatında yazılır.`,
+          example: `NP_004324.2:<mark>p.Val600Glu</mark>`
+        }
+      };
+      
+      return explanations[kind] || {t: 'Token', b: val || 'Açıklama mevcut değil', example: ''};
+    }
+
+    // Set token explanation in the panel
+    function setToken(kind, val) {
+      const panel = document.getElementById('tokenCard');
+      const info = tokenExplain(kind, val);
+      
+      let exampleHTML = '';
+      if (info.example) {
+        exampleHTML = `<div class="token-example">${info.example}</div>`;
+      }
+      
+      panel.innerHTML = `
+        <div class="token-name">${info.t}</div>
+        <div class="token-desc">${info.b}</div>
+        ${exampleHTML}
+      `;
+    }
+
+    // Bind token click events
+    function bindTokens(scope) {
+      scope.querySelectorAll('.token').forEach(t => {
+        t.addEventListener('click', () => {
+          setToken(t.dataset.token || 'ref', t.dataset.val || t.textContent.trim());
+        });
+      });
+    }
+
+    // Step definitions
+    const steps = ['introduction', 'syntax', 'coordinates', 'variants', 'interpretation'];
+    let currentStep = 0;
+    const main = document.getElementById('main');
+    const title = document.getElementById('title');
+    const subtitle = document.getElementById('subtitle');
+
+    // Step views
+    const Views = {
+      introduction: () => {
+        title.textContent = 'Giriş ve Temel Kavramlar';
+        subtitle.textContent = 'NGS ve varyant terminolojisine giriş';
+        
+        main.innerHTML = `
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-dna"></i> NGS ve Varyant Analizi
+            </div>
+            <div class="section-content">
+              <p>Next Generation Sequencing (NGS), yüksek verimli DNA dizileme teknolojilerini ifade eder. Bu teknoloji sayesinde binlerce gen aynı anda dizilenebilir ve genetik varyantlar tespit edilebilir.</p>
+              
+              <div class="tip-box">
+                <div class="tip-title">İpucu</div>
+                <div>HGVS (Human Genome Variation Society), genetik varyantların standartize edilmiş şekilde isimlendirilmesi için kurallar oluşturmuştur.</div>
+              </div>
+              
+              <p>Varyant isimlendirme kurallarını anlamak:</p>
+              <ul>
+                <li>Klinik raporlamada standardizasyon sağlar</li>
+                <li>Varyant veritabanlarında tutarlılık oluşturur</li>
+                <li>İletişimi kolaylaştırır</li>
+                <li>Veri paylaşımını mümkün kılar</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-code"></i> Temel Bileşenler
+            </div>
+            <div class="section-content">
+              <p>Bir HGVS ifadesi genellikle şu bileşenlerden oluşur:</p>
+              
+              <div class="tokens">
+                <span class="token" data-token="ref">Referans Tanımlayıcı</span>
+                <span class="token" data-token="colon">:</span>
+                <span class="token" data-token="levelc">Koordinat Seviyesi</span>
+                <span class="token" data-token="pos">Pozisyon</span>
+                <span class="token" data-token="change">Değişim</span>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Örnek Varyant</div>
+                <div class="code">
+                  <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>
+                  <span class="token" data-token="colon">:</span>
+                  <span class="token" data-token="levelc">c.</span>
+                  <span class="token" data-token="pos" data-val="1799">1799</span>
+                  <span class="token" data-token="change" data-val="T>A">T>A</span>
+                  <span> (</span>
+                  <span class="token" data-token="levelp">p.</span>
+                  <span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span>
+                  <span>)</span>
+                </div>
+                <p>Bu, BRAF genindeki ünlü V600E mutasyonunu ifade eder. c.1799T>A, DNA düzeyindeki değişimi; p.Val600Glu ise protein düzeyindeki değişimi gösterir.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="interactive-demo">
+            <div class="demo-title">Varyant Analiz Aracı</div>
+            <p>Bir HGVS ifadesi girin ve bileşenlerini analiz edin:</p>
+            
+            <div class="input-group">
+              <input type="text" class="input-field" placeholder="Örnek: NM_004333.6:c.1799T>A" value="NM_004333.6:c.1799T>A">
+              <button class="analyze-btn">Analiz Et</button>
+            </div>
+            
+            <div class="result-box">
+              Sonuçlar burada görünecek...
+            </div>
+          </div>
+        `;
+        
+        bindTokens(main);
+      },
+      
+      syntax: () => {
+        title.textContent = 'HGVS Yazım Kuralları';
+        subtitle.textContent = 'Semboller ve yapı taşları';
+        
+        main.innerHTML = `
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-pencil-alt"></i> Temel Yazım Kuralları
+            </div>
+            <div class="section-content">
+              <p>HGVS notasyonu belirli kurallara göre yazılır. İfadeler daima şu sırayı izler:</p>
+              
+              <ol>
+                <li><strong>Referans tanımlayıcı</strong> (örn. NM_004333.6)</li>
+                <li><strong>İki nokta üst üste</strong> (:)</li>
+                <li><strong>Koordinat seviyesi</strong> (c., g., n., p.)</li>
+                <li><strong>Pozisyon</strong> (örn. 1799)</li>
+                <li><strong>Değişim tanımı</strong> (örn. T>A)</li>
+              </ol>
+              
+              <div class="example">
+                <div class="example-title">Örnek: BRAF V600E Mutasyonu</div>
+                <div class="code">
+                  <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>
+                  <span class="token" data-token="colon">:</span>
+                  <span class="token" data-token="levelc">c.</span>
+                  <span class="token" data-token="pos" data-val="1799">1799</span>
+                  <span class="token" data-token="change" data-val="T>A">T>A</span>
+                </div>
+                <p>Bu ifadeyi parçalarsak:</p>
+                <ul>
+                  <li><strong>NM_004333.6</strong>: BRAF geninin mRNA referans sekansı</li>
+                  <li><strong>c.</strong>: Kodlayan DNA koordinatları</li>
+                  <li><strong>1799</strong>: Referans sekans üzerindeki pozisyon</li>
+                  <li><strong>T>A</strong>: Timin bazının Adenin bazına dönüşümü</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-symbols"></i> Semboller ve Anlamları
+            </div>
+            <div class="section-content">
+              <p>HGVS notasyonunda kullanılan temel semboller:</p>
+              
+              <div class="tokens">
+                <span class="token" data-token="del">del</span>
+                <span class="token" data-token="ins">ins</span>
+                <span class="token" data-token="dup">dup</span>
+                <span class="token" data-token="delins">delins</span>
+                <span class="token" data-token="inv">inv</span>
+                <span class="token" data-token="fs">fs</span>
+                <span class="token" data-token="ter">ter</span>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Farklı Varyant Tipleri</div>
+                
+                <p><strong>Silme (Deletion)</strong></p>
+                <div class="code">NM_004333.6:c.1799_1800<span class="token" data-token="del">del</span></div>
+                <p>1799 ve 1800. pozisyondaki nükleotidlerin silinmesi</p>
+                
+                <p><strong>Ekleme (Insertion)</strong></p>
+                <div class="code">NM_004333.6:c.1799_1800<span class="token" data-token="ins">ins</span>T</div>
+                <p>1799 ve 1800. pozisyonlar arasına T nükleotidinin eklenmesi</p>
+                
+                <p><strong>Yer Değiştirme (Substitution)</strong></p>
+                <div class="code">NM_004333.6:c.1799T<span class="token" data-token="gt">></span>A</div>
+                <p>1799. pozisyondaki T nükleotidinin A ile değişmesi</p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        bindTokens(main);
+      },
+      
+      coordinates: () => {
+        title.textContent = 'Koordinat Sistemleri';
+        subtitle.textContent = 'c., g., n., p. seviyeleri';
+        
+        main.innerHTML = `
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-map-marker-alt"></i> Koordinat Seviyeleri
+            </div>
+            <div class="section-content">
+              <p>HGVS notasyonunda varyantlar farklı koordinat seviyelerinde tanımlanabilir:</p>
+              
+              <div class="tokens">
+                <span class="token" data-token="levelg">g.</span>
+                <span class="token" data-token="levelc">c.</span>
+                <span class="token" data-token="leveln">n.</span>
+                <span class="token" data-token="levelp">p.</span>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Genomik DNA Seviyesi (g.)</div>
+                <div class="code">
+                  <span class="token" data-token="ref" data-val="NC_000007.14">NC_000007.14</span>
+                  <span class="token" data-token="colon">:</span>
+                  <span class="token" data-token="levelg">g.</span>
+                  <span class="token" data-token="pos" data-val="140753336">140753336</span>
+                  <span class="token" data-token="change" data-val="A>T">A>T</span>
+                </div>
+                <p>İnsan kromozom 7 referansı üzerindeki 140,753,336. pozisyonda A bazının T bazına dönüşümü</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Kodlayan DNA Seviyesi (c.)</div>
+                <div class="code">
+                  <span class="token" data-token="ref" data-val="NM_004333.6">NM_004333.6</span>
+                  <span class="token" data-token="colon">:</span>
+                  <span class="token" data-token="levelc">c.</span>
+                  <span class="token" data-token="pos" data-val="1799">1799</span>
+                  <span class="token" data-token="change" data-val="T>A">T>A</span>
+                </div>
+                <p>BRAF mRNA referansı üzerindeki 1799. pozisyonda T bazının A bazına dönüşümü</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Protein Seviyesi (p.)</div>
+                <div class="code">
+                  <span class="token" data-token="ref" data-val="NP_004324.2">NP_004324.2</span>
+                  <span class="token" data-token="colon">:</span>
+                  <span class="token" data-token="levelp">p.</span>
+                  <span class="token" data-token="aa" data-val="Val600Glu">Val600Glu</span>
+                </div>
+                <p>BRAF protein referansı üzerindeki 600. pozisyondaki Valin amino asidinin Glutamik asite dönüşümü</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-compress-alt"></i> Pozisyon Belirleme
+            </div>
+            <div class="section-content">
+              <p>Pozisyonlar tek bir nükleotid veya bir aralık şeklinde belirtilebilir:</p>
+              
+              <div class="example">
+                <div class="example-title">Tek Nükleotid Varyantı</div>
+                <div class="code">NM_004333.6:c.<span class="token" data-token="pos" data-val="1799">1799</span>T>A</div>
+                <p>1799. pozisyondaki değişim</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Aralık Belirtme</div>
+                <div class="code">NM_004333.6:c.<span class="token" data-token="pos" data-val="1799_1800">1799_1800</span>del</div>
+                <p>1799'dan 1800'a kadar olan bölgenin silinmesi</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">İntronik Pozisyonlar</div>
+                <div class="code">NM_004333.6:c.1799<span class="token" data-token="plus">+</span>2T>G</div>
+                <p>1799. ekzonun hemen sonrasındaki intronun 2. pozisyonunda T>G değişimi</div>
+                
+                <div class="code">NM_004333.6:c.1799<span class="token" data-token="minus">-</span>3A>T</div>
+                <p>1799. ekzonun hemen öncesindeki intronun 3. pozisyonunda A>T değişimi</p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        bindTokens(main);
+      },
+      
+      variants: () => {
+        title.textContent = 'Varyant Tipleri ve Anlamları';
+        subtitle.textContent = 'SNV, indel, delins, dup';
+        
+        main.innerHTML = `
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-exchange-alt"></i> Yer Değiştirmeler (Substitutions)
+            </div>
+            <div class="section-content">
+              <p>Tek nükleotid değişimleri (SNV - Single Nucleotide Variant) en yaygın varyant tipidir.</p>
+              
+              <div class="example">
+                <div class="example-title">Standart Yer Değiştirme</div>
+                <div class="code">NM_004333.6:c.1799T<span class="token" data-token="gt">></span>A</div>
+                <p>1799. pozisyondaki Timin bazının Adenin bazı ile değişmesi</p>
+                
+                <div class="code">NP_004324.2:p.Val600Glu</div>
+                <p>600. pozisyondaki Valin amino asidinin Glutamik asit ile değişmesi (V600E)</p>
+              </div>
+              
+              <div class="tip-box">
+                <div class="tip-title">Önemli Not</div>
+                <div>Protein seviyesindeki değişimler 3 harfli amino asit kodu ile yazılır. İlk harf büyük, diğerleri küçük harfle yazılır.</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-trash-alt"></i> Silmeler (Deletions)
+            </div>
+            <div class="section-content">
+              <p>Bir veya daha fazla nükleotidin silinmesini ifade eder.</p>
+              
+              <div class="example">
+                <div class="example-title">Tek Nükleotid Silinmesi</div>
+                <div class="code">NM_004333.6:c.1799<span class="token" data-token="del">del</span></div>
+                <p>1799. pozisyondaki nükleotidin silinmesi</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Çoklu Nükleotid Silinmesi</div>
+                <div class="code">NM_004333.6:c.1799_1801<span class="token" data-token="del">del</span></div>
+                <p>1799'dan 1801'e kadar olan 3 nükleotidin silinmesi</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Protein Seviyesinde Silinme</div>
+                <div class="code">NP_004324.2:p.Val600<span class="token" data-token="del">del</span></div>
+                <p>600. pozisyondaki Valin amino asidinin silinmesi</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-plus-circle"></i> Eklemeler (Insertions)
+            </div>
+            <div class="section-content">
+              <p>Bir veya daha fazla nükleotidin eklenmesini ifade eder.</p>
+              
+              <div class="example">
+                <div class="example-title">Tek Nükleotid Eklenmesi</div>
+                <div class="code">NM_004333.6:c.1799_1800<span class="token" data-token="ins">ins</span>T</div>
+                <p>1799 ve 1800. pozisyonlar arasına T nükleotidinin eklenmesi</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Çoklu Nükleotid Eklenmesi</div>
+                <div class="code">NM_004333.6:c.1799_1800<span class="token" data-token="ins">ins</span>TAG</div>
+                <p>1799 ve 1800. pozisyonlar arasına TAG nükleotid dizisinin eklenmesi</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-copy"></i> Çoğaltmalar (Duplications)
+            </div>
+            <div class="section-content">
+              <p>Bir dizinin kopyalanarak aynı bölgeye eklenmesini ifade eder.</p>
+              
+              <div class="example">
+                <div class="example-title">Nükleotid Çoğaltma</div>
+                <div class="code">NM_004333.6:c.1799_1800<span class="token" data-token="dup">dup</span></div>
+                <p>1799 ve 1800. pozisyondaki nükleotidlerin çoğaltılması</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Protein Çoğaltma</div>
+                <div class="code">NP_004324.2:p.Val600_Glu601<span class="token" data-token="dup">dup</span></div>
+                <p>600-601. pozisyondaki Valin-Glutamik asit çiftinin çoğaltılması</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-retweet"></i> Karmaşık Varyantlar
+            </div>
+            <div class="section-content">
+              <p>Birden fazla değişiklik içeren varyant tipleri.</p>
+              
+              <div class="example">
+                <div class="example-title">Silme ve Ekleme (delins)</div>
+                <div class="code">NM_004333.6:c.1799_1800<span class="token" data-token="delins">delins</span>AG</div>
+                <p>1799 ve 1800. pozisyondaki nükleotidlerin silinerek yerine AG dizisinin eklenmesi</p>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Çerçeve Kayması (Frameshift)</div>
+                <div class="code">NP_004324.2:p.Val600<span class="token" data-token="fs">fs</span>Ter12</div>
+                <p>600. pozisyondan itibaren okuma çerçevesinin kayması sonucu 12. amino asit sonrasında durdurma kodonu oluşması</p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        bindTokens(main);
+      },
+      
+      interpretation: () => {
+        title.textContent = 'Klinik Yorumlama';
+        subtitle.textContent = 'Varyant etkisi ve raporlama';
+        
+        main.innerHTML = `
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-stethoscope"></i> Varyant Etkisi ve Klinik Önemi
+            </div>
+            <div class="section-content">
+              <p>Varyantların klinik önemi, moleküler etkilerine ve fonksiyonel sonuçlarına göre sınıflandırılır:</p>
+              
+              <ul>
+                <li><strong>Patogenik</strong>: Hastalıkla ilişkili olduğu kesin olarak bilinen varyantlar</li>
+                <li><strong>Olası Patogenik</strong>: Hastalıkla ilişkili olduğu düşünülen varyantlar</li>
+                <li><strong>Belirsiz Anlamlı</strong>: Klinik önemi bilinmeyen varyantlar (VUS)</li>
+                <li><strong>Olası Benign</strong>: Hastalıkla ilişkili olma olasılığı düşük varyantlar</li>
+                <li><strong>Benign</strong>: Hastalıkla ilişkili olmadığı bilinen varyantlar</li>
+              </ul>
+              
+              <div class="example">
+                <div class="example-title">BRAF V600E Klinik Yorumu</div>
+                <div class="code">NM_004333.6:c.1799T>A (p.Val600Glu)</div>
+                <p><strong>Klinik Önemi</strong>: Patogenik</p>
+                <p><strong>Etkisi</strong>: BRAF kinaz aktivitesinde artış, MAPK yolunun sürekli aktivasyonu</p>
+                <p><strong>İlişkili Hastalıklar</strong>: Melanom, kolorektal kanser, papiller tiroid kanseri</p>
+                <p><strong>Hedefe Yönelik Tedavi</strong>: BRAF inhibitörleri (vemurafenib, dabrafenib)</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-file-medical-alt"></i> Raporlama Standartları
+            </div>
+            <div class="section-content">
+              <p>Klinik genetik raporlarda varyantlar standart HGVS notasyonu ile belirtilmelidir.</p>
+              
+              <div class="tip-box">
+                <div class="tip-title">Raporlama İpuçları</div>
+                <div>
+                  <ul>
+                    <li>Varyant tanımı için en güncel referans sekans versiyonunu kullanın</li>
+                    <li>DNA ve protein seviyesindeki ifadeleri birlikte verin</li>
+                    <li>Köşeli parantez içinde alternatif notasyonları belirtin</li>
+                    <li>Varyantın frekans bilgilerini ekleyin (gnomAD, dbSNP)</li>
+                    <li>Klinik önem ve ACMG sınıflandırmasını açıkça belirtin</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="example">
+                <div class="example-title">Örnek Rapor Parçası</div>
+                <div class="code">
+                  <strong>Varyant:</strong> NM_004333.6:c.1799T>A (p.Val600Glu)<br>
+                  <strong>Gen:</strong> BRAF<br>
+                  <strong>Kromozom:</strong> 7<br>
+                  <strong>Koordinat:</strong> g.140753336A>T (GRCh38)<br>
+                  <strong>dbSNP:</strong> rs113488022<br>
+                  <strong>gnomAD Frekans:</strong> 0.00002<br>
+                  <strong>ACMG Sınıfı:</strong> Pathogenic<br>
+                  <strong>Klinik Önemi:</strong> Onkojenik aktivite, hedefe yönelik tedaviye duyarlı
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-database"></i> Veritabanları ve Kaynaklar
+            </div>
+            <div class="section-content">
+              <p>Varyant yorumlama için kullanılan önemli veritabanları:</p>
+              
+              <ul>
+                <li><strong>ClinVar</strong>: Varyantların klinik önem bilgileri</li>
+                <li><strong>dbSNP</strong>: Tek nükleotid polimorfizmleri</li>
+                <li><strong>gnomAD</strong>: Popülasyon frekans verileri</li>
+                <li><strong>COSMIC</strong>: Kanserle ilişkili somatik mutasyonlar</li>
+                <li><strong>UniProt</strong>: Protein yapı ve fonksiyon bilgileri</li>
+                <li><strong>OMIM</strong>: Genetik hastalık bilgileri</li>
+              </ul>
+              
+              <div class="example">
+                <div class="example-title">Varyant Doğrulama</div>
+                <p>Bir varyantın doğruluğunu kontrol etmek için:</p>
+                <ol>
+                  <li>Referans sekans versiyonunu kontrol edin</li>
+                  <li>Koordinatları genomik hizalamada doğrulayın</li>
+                  <li>Varyantın diğer veritabanlarında nasıl raporlandığına bakın</li>
+                  <li>Literatürde benzer varyantların klinik önemini araştırın</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        bindTokens(main);
+      }
+    };
+
+    // Navigation functions
+    function render() {
+      Views[steps[currentStep]]();
+      document.querySelectorAll('.step').forEach((s, i) => {
+        s.classList.toggle('active', i === currentStep);
+      });
+      
+      // Update button states
+      document.getElementById('prev').disabled = currentStep === 0;
+      document.getElementById('next').disabled = currentStep === steps.length - 1;
+    }
+    
+    document.getElementById('prev').addEventListener('click', () => {
+      currentStep = Math.max(0, currentStep - 1);
+      render();
+    });
+    
+    document.getElementById('next').addEventListener('click', () => {
+      currentStep = Math.min(steps.length - 1, currentStep + 1);
+      render();
+    });
+    
+    document.getElementById('progress').addEventListener('click', (e) => {
+      const step = e.target.closest('.step');
+      if (!step) return;
+      
+      const stepIndex = steps.indexOf(step.dataset.step);
+      if (stepIndex !== -1) {
+        currentStep = stepIndex;
+        render();
+      }
+    });
+
+    // Initialize
+    render();
+  </script>
+</body>
+</html>
