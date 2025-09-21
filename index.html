@@ -86,6 +86,47 @@
     .tip-box{background:var(--ok);border-left:4px solid #10b981;padding:12px;border-radius:8px;margin:12px 0;font-size:14px}
     .tip-title{font-weight:700;margin-bottom:5px;color:#065f46}
     .footer{padding:15px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:14px}
+
+    /* ===== MOBILE FIX PACK ===== */
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: 1fr; gap: 12px; }
+      /* Progress: yatay chip-nav */
+      .progress { position: static; height: auto; padding: 10px 12px; gap: 8px; display: block; }
+      .progress-title { display:none; }
+      .progress .nav { border-top: 0; padding-top: 0; margin-top: 8px; }
+      .progress .step { display: inline-flex; white-space: nowrap; margin-right: 8px; padding: 10px 12px; border-radius: 999px; background: var(--chip); }
+      #progress { overflow-x: auto; white-space: nowrap; }
+      .title { font-size: 22px; }
+      .content-title { font-size: 20px; }
+      .content-subtitle { font-size: 14px; }
+      .content-body { grid-template-columns: 1fr; gap: 12px; }
+      .code { white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
+      .token { padding: 10px 14px; font-size: 15px; }
+
+      /* Token panel: bottom sheet */
+      .token-panel {
+        position: fixed; left: 0; right: 0; bottom: 0;
+        border-radius: 14px 14px 0 0; border: 1px solid var(--border);
+        background: var(--panel); box-shadow: 0 -6px 16px rgba(0,0,0,.15);
+        transform: translateY(100%); transition: transform .25s ease;
+        max-height: 55vh; padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        z-index: 999;
+      }
+      .token-panel.open { transform: translateY(0); }
+      .token-panel-title { position: sticky; top: 0; background: var(--panel); padding-bottom: 8px; border-bottom: 1px solid var(--border); z-index: 2; }
+      .token-card { max-height: 42vh; overflow: auto; background: transparent; border: 0; padding: 12px 0; }
+
+      /* Yüzen aç/kapat düğmesi */
+      .mobile-panel-toggle {
+        position: fixed; right: 16px; bottom: 16px; z-index: 1000;
+        border: none; border-radius: 999px; padding: 12px 14px;
+        background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,.2);
+      }
+    }
+    @media (max-width: 360px) {
+      .token { padding: 8px 10px; font-size: 14px; }
+      .badge { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -93,7 +134,6 @@
     <header>
       <div class="title">NGS Mutasyon Varyantları — Kapsamlı Öğrenme Rehberi</div>
       <div class="subtitle">HGVS/HGNC kuralları ile Next Generation Sequencing verilerini anlama ve yorumlama</div>
-      <!-- Kılavuzlar yalnızca burada -->
       <div class="guidelines">
         <a href="https://hgvs-nomenclature.org/stable/recommendations/general/" target="_blank" class="guideline-link">
           <i class="fas fa-external-link-alt"></i> HGVS Genel Öneriler
@@ -172,8 +212,8 @@
         <div class="content-body">
           <div class="explanation" id="main"></div>
 
-          <!-- Token panel: tek açıklama, sticky -->
-          <div class="token-panel">
+          <!-- Token panel -->
+          <div class="token-panel" id="tokenPanel">
             <div class="token-panel-title">
               <i class="fas fa-info-circle"></i> Detaylı Açıklama
               <div class="token-toolbar">
@@ -203,86 +243,36 @@
     </div>
   </div>
 
+  <!-- Mobilde alt köşede aç-kapa düğmesi -->
+  <button class="mobile-panel-toggle" id="panelToggle" aria-controls="tokenPanel" aria-expanded="false">
+    <i class="fas fa-align-right"></i> Açıklama
+  </button>
+
   <script>
     /* ---------- Token açıklamaları (HGVS doğruluklarıyla) ---------- */
     function tokenExplain(kind, val) {
       const ex = {
-        colon: {
-          t: ': — Referans & Varyant Ayırıcı',
-          b: `Erişim (ör. NM_004333.6) ile varyant tanımını ayırır.`,
-          example: `NM_004333.6<mark>:c.1799T>A</mark>`
-        },
-        dcolon: {
-          t: ':: — Füzyon Ayırıcı',
-          b: `İki gen/transkriptin uç uca gelmesini ifade eder; raporda izoform belirtmek önemlidir (örn. e13a2).`,
-          example: `BCR<mark>::</mark>ABL1`
-        },
-        levelc: {
-          t: 'c. — Kodlayan DNA',
-          b: `Transkript referansına göre CDS koordinatları. Raporlamada en yaygın düzey.`,
-          example: `NM_004333.6:<mark>c.</mark>1799T>A`
-        },
-        levelg: {
-          t: 'g. — Genomik DNA',
-          b: `Kromozom/genom referansına göre (intronlar dahil) koordinatlar.`,
-          example: `NC_000007.14:<mark>g.</mark>140453136A>T`
-        },
-        leveln: {
-          t: 'n. — Non-kodlayan RNA',
-          b: `Non-kodlayan RNA transkriptleri için koordinatlar.`,
-          example: `NR_002196.2:<mark>n.</mark>215A>G`
-        },
-        levelp: {
-          t: 'p. — Protein',
-          b: `Amino asit düzeyi. HGVS üç harfli kodu önerir (örn. p.Val600Glu).`,
-          example: `NP_004324.2:<mark>p.</mark>Val600Glu`
-        },
+        colon: { t: ': — Referans & Varyant Ayırıcı', b: `Erişim (ör. NM_004333.6) ile varyant tanımını ayırır.`, example: `NM_004333.6<mark>:c.1799T>A</mark>` },
+        dcolon: { t: ':: — Füzyon Ayırıcı', b: `İki gen/transkriptin uç uca gelmesini ifade eder; raporda izoform belirtilmeli (örn. e13a2).`, example: `BCR<mark>::</mark>ABL1` },
+        levelc: { t: 'c. — Kodlayan DNA', b: `Transkript referansına göre CDS koordinatları. Raporlamada en yaygın düzey.`, example: `NM_004333.6:<mark>c.</mark>1799T>A` },
+        levelg: { t: 'g. — Genomik DNA', b: `Kromozom/genom referansına göre (intronlar dahil) koordinatlar.`, example: `NC_000007.14:<mark>g.</mark>140453136A>T` },
+        leveln: { t: 'n. — Non-kodlayan RNA', b: `Non-kodlayan RNA transkriptleri için koordinatlar.`, example: `NR_002196.2:<mark>n.</mark>215A>G` },
+        levelp: { t: 'p. — Protein', b: `Amino asit düzeyi. HGVS üç harfli kodu önerir (örn. p.Val600Glu).`, example: `NP_004324.2:<mark>p.</mark>Val600Glu` },
         del: { t: 'del — Silme (Deletion)', b: 'Bir veya daha çok bazın silinmesi.', example: `c.68_69<mark>del</mark>AG` },
         ins: { t: 'ins — Ekleme (Insertion)', b: 'Pozisyona yeni nükleotid(ler) eklenmesi.', example: `c.123_124<mark>ins</mark>A` },
         dup: { t: 'dup — Çoğaltma (Duplication)', b: 'Aynı dizinin tekrarı.', example: `c.100_102<mark>dup</mark>` },
         delins: { t: 'delins — Sil+Ekle', b: 'Bir aralık silinir ve farklı dizi eklenir. “indel” yerine delins tercih edilir.', example: `c.1799_1800<mark>delins</mark>AG` },
         inv: { t: 'inv — İnversiyon', b: 'Bir aralığın ters çevrilmesi.', example: `c.400_450<mark>inv</mark>` },
-
-        plus: {
-          t: '+ — intronik (ekzon SONRASI, donor yakını)',
-          b: `Örn. c.92+1G>T: Ekzon 92 biter bitmez intronun ilk bazında değişim.`,
-          example: `c.92<mark>+1</mark>G>T`
-        },
-        minus: {
-          t: '- — intronik (ekzon ÖNCESİ, acceptor yakını) / 5\' UTR negatif c.',
-          b: `Örn. c.92-1G>A: Ekzon 92 başlamadan önceki intron bazı. Örn. c.-124C>T: ATG öncesi 5' UTR.`,
-          example: `c.92<mark>-1</mark>G>A  ·  c.<mark>-124</mark>C>T`
-        },
-        asterisk: {
-          t: "* — 3' UTR (stop sonrası)",
-          b: "c.*n biçimi, stop kodonundan sonraki 3' UTR konumlarını gösterir (örn. c.*2G>A).",
-          example: "c.<mark>*2</mark>G>A"
-        },
-
+        plus: { t: '+ — intronik (ekzon SONRASI, donor yakını)', b: `Örn. c.92+1G>T: Ekzon 92 biter bitmez intronun ilk bazında değişim.`, example: `c.92<mark>+1</mark>G>T` },
+        minus: { t: "- — intronik (ekzon ÖNCESİ, acceptor yakını) / 5' UTR negatif c.", b: `Örn. c.92-1G>A: Ekzon 92 başlamadan önceki intron bazı. Örn. c.-124C>T: ATG öncesi 5' UTR.`, example: `c.92<mark>-1</mark>G>A  ·  c.<mark>-124</mark>C>T` },
+        asterisk: { t: "* — 3' UTR (stop sonrası)", b: "c.*n biçimi, stop kodonundan sonraki 3' UTR konumlarını gösterir (örn. c.*2G>A).", example: "c.<mark>*2</mark>G>A" },
         gt: { t: '> — Yer Değiştirme (Substitution)', b: 'Tek baz değişimi referans>alternatif biçiminde yazılır.', example: `c.1799T<mark>></mark>A` },
-        fs: {
-          t: 'fs — Frameshift',
-          b: 'Protein düzeyinde okuma çerçevesi kaymasını ifade eder: p.(Aaa#BbbfsTerX).',
-          example: `p.Glu23Val<mark>fs</mark>Ter17`
-        },
-        ter: {
-          t: 'Ter — Durdurma kodonu',
-          b: "HGVS ‘Ter’i önerir (örn. p.Gln22Ter). '*' kabul edilse de raporda Ter tercih edilir.",
-          example: `p.Gln22<mark>Ter</mark>`
-        },
-
-        ref: {
-          t: 'Referans Sekans (accession.version)',
-          b: 'RefSeq/Ensembl erişim numarası; versiyon mutlaka yazılmalı. MANE Select transkript tercih edilebilir.',
-          example: `<mark>${val||'NM_XXXXXX.X'}</mark>:c.123A>G`
-        },
-        pos: {
-          t: 'Pozisyon / Aralık',
-          b: 'Tek baz ya da aralık (n_m) biçiminde yazılır; c. koordinatında CDS başlangıcı referanstır.',
-          example: `c.<mark>${val||'123'}</mark>`
-        },
-        change: { t: 'Değişim Tanımı', b: 'Varyantın doğasını açıklar (örn. A>G, del, ins, dup, delins).', example: `c.123<mark>${val||'A>G'}</mark>` },
-        aa: { t: 'Amino Asit Değişimi', b: 'Üç harfli AA kodu ile (İlk harf büyük): p.Val600Glu.', example: `p.<mark>${(val||'Val600Glu')}</mark>` },
+        fs: { t: 'fs — Frameshift', b: 'Protein düzeyinde okuma çerçevesi kaymasını ifade eder: p.(Aaa#BbbfsTerX).', example: `p.Glu23Val<mark>fs</mark>Ter17` },
+        ter: { t: 'Ter — Durdurma kodonu', b: "HGVS ‘Ter’i önerir (örn. p.Gln22Ter). '*' kabul edilse de raporda Ter tercih edilir.", example: `p.Gln22<mark>Ter</mark>` },
+        ref: { t: 'Referans Sekans (accession.version)', b: 'RefSeq/Ensembl erişimi; versiyon yazılmalı. MANE Select transkript tercih edilebilir.', example: `<mark>${val||'NM_XXXXXX.X'}</mark>:c.123A>G` },
+        pos: { t: 'Pozisyon / Aralık', b: 'Tek baz ya da aralık (n_m). c. koordinatında CDS başlangıcı referanstır.', example: `c.<mark>${val||'123'}</mark>` },
+        change: { t: 'Değişim Tanımı', b: 'Varyantın doğasını açıklar (A>G, del, ins, dup, delins).', example: `c.123<mark>${val||'A>G'}</mark>` },
+        aa: { t: 'Amino Asit Değişimi', b: 'Üç harfli AA kodu ile (Val600Glu).', example: `p.<mark>${(val||'Val600Glu')}</mark>` },
         fusionIso: { t: 'Füzyon izoformu', b: 'Örn. e13a2, e14a2; raporda izoform belirtilmelidir.', example: `BCR::ABL1 <mark>e13a2</mark>` }
       };
       return ex[kind] || { t: 'Token', b: val || 'Açıklama yok', example: '' };
@@ -656,7 +646,6 @@
     /* ---------- Basit ayrıştırıcı (Analiz Et) ---------- */
     function analyze(input) {
       const out = document.getElementById('analyzeResult');
-      // Çok yaygın örüntü: REF:LEVEL.POS CHANGE (opsiyonel protein)
       const re = /^([^:]+):(c|g|n|p)\.\s*([^\s(]+)\s*([A-Za-z*>_]+(?:>[A-Za-z*])?|delins[A-Za-z]+|del|ins[A-Za-z]*|dup|inv)?(?:\s*\(\s*(p\.[^)]+)\s*\))?$/i;
       const m = input.trim().match(re);
       if (!m) {
@@ -683,49 +672,73 @@
     }
 
     window.addEventListener('load', () => {
-      // Deep-link
       const h = location.hash.replace('#','');
       const i = steps.indexOf(h);
-      if (i >= 0) currentStep = i;
-      else currentStep = 0;
+      currentStep = i >= 0 ? i : 0;
       render();
     });
 
     document.getElementById('prev').addEventListener('click', () => { currentStep = Math.max(0, currentStep - 1); render(); });
     document.getElementById('next').addEventListener('click', () => { currentStep = Math.min(steps.length - 1, currentStep + 1); render(); });
 
-    // Klavye erişilebilirliği
     document.getElementById('progress').addEventListener('keydown', (e) => {
-      const step = e.target.closest('.step');
-      if (!step) return;
+      const step = e.target.closest('.step'); if (!step) return;
       if (e.key === 'Enter' || e.key === ' ') { step.click(); e.preventDefault(); }
     });
-
-    // Adım tıklama
     document.getElementById('progress').addEventListener('click', (e) => {
       const step = e.target.closest('.step'); if (!step) return;
       const idx = steps.indexOf(step.dataset.step);
       if (idx !== -1) { currentStep = idx; render(); }
     });
 
-    // Token tıklamaları (event delegation)
+    // Token tıklamaları (tek delegasyon)
     document.addEventListener('click', (e) => {
       const t = e.target.closest('.token');
       if (!t) return;
       setToken(t.dataset.token || 'ref', t.dataset.val || t.textContent.trim());
+      if (isMobile()) openPanel();
     });
 
-    // Analiz Et
+    // Analiz Et & Kopyala
     document.addEventListener('click', (e) => {
       if (e.target.id === 'analyzeBtn') {
         const val = document.getElementById('hgvsInput').value;
         analyze(val);
+        if (isMobile()) openPanel();
       }
       if (e.target.id === 'copyToken') {
         const txt = document.getElementById('tokenCard').innerText;
         navigator.clipboard.writeText(txt);
       }
     });
+
+    /* ===== MOBILE FIX PACK (JS) ===== */
+    const panel = document.getElementById('tokenPanel');
+    const toggleBtn = document.getElementById('panelToggle');
+
+    function isMobile(){ return window.matchMedia('(max-width:1024px)').matches; }
+    function openPanel(){
+      if (!panel) return;
+      panel.classList.add('open');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded','true');
+    }
+    function closePanel(){
+      if (!panel) return;
+      panel.classList.remove('open');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded','false');
+    }
+    function togglePanel(){
+      if (!panel) return;
+      panel.classList.toggle('open');
+      if (toggleBtn){
+        const open = panel.classList.contains('open');
+        toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+    }
+    if (toggleBtn){
+      toggleBtn.addEventListener('click', (e)=>{ e.preventDefault(); togglePanel(); });
+    }
+    window.addEventListener('resize', ()=>{ if (!isMobile()) closePanel(); });
   </script>
 </body>
 </html>
